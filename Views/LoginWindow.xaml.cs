@@ -27,15 +27,19 @@ namespace AdminClient.Views
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string login = LoginBox.Text;
-            string password = PasswordBox.Text;
+            //string login = LoginBox.Text;
+            //string password = PasswordBox.Text;
+            string login = "1231123123";
+            string password = "887171";
+
+            //var client = APIHttpClient.Instance;
 
             LoginOperation operation = new LoginOperation();
 
             var user = await operation.AuthenticateUserAsync(login, password);
 
             if (user != null)
-            { 
+            {
                 LoginOperation.InitializeCurrentUser(user);
 
                 MainInterfaceWindow mainWindow = new MainInterfaceWindow();
@@ -43,6 +47,11 @@ namespace AdminClient.Views
                 mainWindow.Show();
 
                 Close();
+            }
+            if (user == null)
+            {
+                MessageBox.Show("Неправильно был введен логин или пароль, пожалуйста, перепроверьте данные и повторите попытку.",
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

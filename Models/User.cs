@@ -14,6 +14,7 @@ namespace AdminClient.Models
         [MaxLength (100)]
         public string? Email { get; set; }
         public long? RoleID { get; set; }
+        public string? Role { get; set; }
         public long? CompanyID { get; set; }
         [MaxLength (10)]
         [AllowNull]

@@ -11,18 +11,13 @@ namespace AdminClient.Services
 {
     internal class LoginOperation
     {
-        private readonly HttpClient _httpClient;
-        public LoginOperation()
-        {
-            _httpClient = new HttpClient();
-        }
         public async Task<User?> AuthenticateUserAsync(string login, string password)
         {
             try
             {
-                string url = $"https://localhost:5001/api/authentification/{login}/{password}";
+                string url = APILinking.BaseUrl+$"authentification/{login}/{password}";
 
-                var response = await _httpClient.GetAsync(url);
+                var response = await APIHttpClient.Instance.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {

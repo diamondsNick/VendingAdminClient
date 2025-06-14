@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="MainInterfaceWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="17*" />
+            <ColumnDefinition Width="63*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="62*"/>
+            <RowDefinition Height="337*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" Grid.RowSpan="2" Background="#1d2127" Margin="0,1,0,0"></Grid>
+        <Grid Grid.Column="1" Grid.Row="1" Background="#1d2127"/>
+        <Grid Grid.Column="1" Grid.Row="2" Background="#d9d9d9"></Grid>
+
+
+
+
     </Grid>
 </Window>
