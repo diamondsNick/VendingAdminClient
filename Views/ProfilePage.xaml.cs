@@ -16,13 +16,21 @@ using System.Windows.Shapes;
 namespace AdminClient.Views
 {
     /// <summary>
-    /// Interaction logic for Profile.xaml
+    /// Interaction logic for ProfilePage.xaml
     /// </summary>
-    public partial class Profile : Page
+    public partial class ProfilePage : Page
     {
-        public Profile()
+        public ProfilePage()
         {
             InitializeComponent();
+            var mainWindow = Application.Current.Windows
+                .OfType<MainInterfaceWindow>()
+                .FirstOrDefault();
+
+            if (mainWindow != null)
+            {
+                mainWindow.CurrentPageTitle.Text = "Профиль";
+            }
         }
     }
 }

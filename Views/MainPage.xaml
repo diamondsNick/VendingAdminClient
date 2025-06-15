@@ -1,14 +1,26 @@
 ﻿<Page x:Class="AdminClient.Views.MainPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AdminClient.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="MainPage">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lvc="http://livecharts.com"
+    xmlns:local="clr-namespace:AdminClient.Views"
+    mc:Ignorable="d" 
+    d:DesignHeight="372" d:DesignWidth="600"
+    MinHeight="372" MinWidth="600"
+    Title="MainPage">
 
-    <Grid>
-        <Button Width="50" Height="50" Foreground="White">GO</Button>
-    </Grid>
+  <Grid Background="#d9d9d9">
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="77*"/>
+          <ColumnDefinition Width="73*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+          <RowDefinition Height="19*"/>
+          <RowDefinition Height="59*"/>
+          <RowDefinition Height="72*"/>
+      </Grid.RowDefinitions>
+      <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="18" Text="Личный кабинет. Главная" VerticalAlignment="Center" Height="32" Width="222"/>
+      
+  </Grid>
 </Page>

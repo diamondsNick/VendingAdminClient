@@ -93,6 +93,16 @@ namespace AdminClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] monitor {
+            get {
+                object obj = ResourceManager.GetObject("monitor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] power {
             get {
                 object obj = ResourceManager.GetObject("power", resourceCulture);
@@ -116,6 +126,36 @@ namespace AdminClient.Properties {
         internal static byte[] ru {
             get {
                 object obj = ResourceManager.GetObject("ru", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] search {
+            get {
+                object obj = ResourceManager.GetObject("search", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] settings {
+            get {
+                object obj = ResourceManager.GetObject("settings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] shoppingCart {
+            get {
+                object obj = ResourceManager.GetObject("shoppingCart", resourceCulture);
                 return ((byte[])(obj));
             }
         }

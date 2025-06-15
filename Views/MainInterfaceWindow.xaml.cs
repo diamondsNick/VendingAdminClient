@@ -24,7 +24,7 @@ namespace AdminClient.Views
         public MainInterfaceWindow()
         {
             InitializeComponent();
-
+            
             var curUser = Services.LoginOperation.GetCurrentUserAsync().Result;
             CompanyNameBox.Text = "";
             if (curUser.Company.Name != null) CompanyNameBox.Text = curUser.Company.Name;
@@ -48,21 +48,29 @@ namespace AdminClient.Views
             }
 
             PageManager.MainFrame = MainFrame;
+            PageManager.MainFrame.Navigate(new MainPage());
         }
 
         private void DropdownButton_Click(object sender, RoutedEventArgs e)
         {
-            if(DropdownPanel.Visibility == Visibility.Visible)
+            DropdownPopup.IsOpen = !DropdownPopup.IsOpen;
+            if (DropdownPopup.IsOpen)
             {
-                DropdownPanel.Visibility = Visibility.Collapsed;
-                MenuPic.Source = new BitmapImage(new Uri("/Resources/arrow.png", UriKind.Relative));
-            }
-            else if(DropdownPanel.Visibility == Visibility.Collapsed)
-            {
-                DropdownPanel.Visibility = Visibility.Visible;
-                DropdownPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1d2127"));
                 MenuPic.Source = new BitmapImage(new Uri("/Resources/arrowUP.png", UriKind.Relative));
             }
+            else
+            {
+                MenuPic.Source = new BitmapImage(new Uri("/Resources/arrow.png", UriKind.Relative));
+            }
+        }
+        private void DropdownPopup_Closed(object sender, EventArgs e)
+        {
+            MenuPic.Source = new BitmapImage(new Uri("/Resources/arrow.png", UriKind.Relative));
+        }
+
+        private void ProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageManager.MainFrame.Navigate(new ProfilePage());
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
@@ -81,5 +89,57 @@ namespace AdminClient.Views
         {
             PageManager.MainFrame.Navigate(new MainPage());
         }
+
+
+        private void MonitorTA_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Administrate_Click(object sender, RoutedEventArgs e)
+        {
+            if(AdminDropPanel.Visibility == Visibility.Visible) CloseAdminDropdownMenu();
+            else OpenAdminDropdownMenu();
+        }
+
+        private void OpenAdminDropdownMenu()
+        {
+            AdminDropPanel.Visibility = Visibility.Visible;
+            AdminDropPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1d2127"));
+            AdminMenuPic.Source = new BitmapImage(new Uri("/Resources/arrowUP.png", UriKind.Relative));
+        }
+
+        private void CloseAdminDropdownMenu()
+        {
+            AdminDropPanel.Visibility = Visibility.Collapsed;
+            AdminMenuPic.Source = new BitmapImage(new Uri("/Resources/arrow.png", UriKind.Relative));
+        }
+
+        private void CountingTMC_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void VendingAutomats_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Companies_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Users_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Modems_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        
     }
 }

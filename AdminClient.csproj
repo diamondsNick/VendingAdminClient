@@ -15,12 +15,19 @@
     <None Remove="Resources\arrow.png" />
     <None Remove="Resources\arrowUP.png" />
     <None Remove="Resources\burger.png" />
+    <None Remove="Resources\monitor.png" />
     <None Remove="Resources\power.png" />
     <None Remove="Resources\profile.png" />
+    <None Remove="Resources\search.png" />
+    <None Remove="Resources\settings.png" />
+    <None Remove="Resources\shoppingCart.png" />
     <None Remove="Views\arrow.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc5.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
@@ -28,11 +35,15 @@
     <Resource Include="Resources\arrow.png" />
     <Resource Include="Resources\arrowUP.png" />
     <Resource Include="Resources\burger.png" />
+    <Resource Include="Resources\monitor.png" />
     <Resource Include="Resources\power.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\profile.png" />
     <Resource Include="Resources\ru.png" />
+    <Resource Include="Resources\search.png" />
+    <Resource Include="Resources\settings.png" />
+    <Resource Include="Resources\shoppingCart.png" />
     <Resource Include="Views\arrow.png" />
   </ItemGroup>
 

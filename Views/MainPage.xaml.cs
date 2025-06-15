@@ -23,6 +23,13 @@ namespace AdminClient.Views
         public MainPage()
         {
             InitializeComponent();
+            var mainWindow = Application.Current.Windows
+                .OfType<MainInterfaceWindow>()
+                .FirstOrDefault();
+            if (mainWindow != null)
+            {
+                mainWindow.CurrentPageTitle.Text = "Главная";
+            }
         }
     }
 }
