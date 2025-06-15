@@ -16,7 +16,7 @@ namespace AdminClient.Models
         [Required]
         public decimal Finances { get; set; }
         [AllowNull]
-        public long ParentCompanyID { get; set; }
+        public long? ParentCompanyID { get; set; }
         [JsonIgnore]
         public IList<User> CompanyUsers { get; set; }
         [JsonIgnore]

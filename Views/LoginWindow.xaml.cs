@@ -32,8 +32,6 @@ namespace AdminClient.Views
             string login = "1231123123";
             string password = "887171";
 
-            //var client = APIHttpClient.Instance;
-
             LoginOperation operation = new LoginOperation();
 
             var user = await operation.AuthenticateUserAsync(login, password);

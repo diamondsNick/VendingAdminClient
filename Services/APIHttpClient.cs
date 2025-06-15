@@ -9,12 +9,7 @@ namespace AdminClient.Services
 {
     public class APIHttpClient
     {
-        private static readonly HttpClientHandler _handler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
-        };
-
-        private static readonly HttpClient _httpClient = new HttpClient(_handler);
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public static HttpClient Instance => _httpClient;
     }
