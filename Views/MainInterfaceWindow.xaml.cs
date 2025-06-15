@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AdminClient.Services;
 
 namespace AdminClient.Views
 {
@@ -23,6 +24,7 @@ namespace AdminClient.Views
         public MainInterfaceWindow()
         {
             InitializeComponent();
+
             var curUser = Services.LoginOperation.GetCurrentUserAsync().Result;
             CompanyNameBox.Text = "";
             if (curUser.Company.Name != null) CompanyNameBox.Text = curUser.Company.Name;
@@ -44,6 +46,8 @@ namespace AdminClient.Views
             {
                 UserRole.Text = curUser.Role.Name;
             }
+
+            PageManager.MainFrame = MainFrame;
         }
 
         private void DropdownButton_Click(object sender, RoutedEventArgs e)
@@ -59,13 +63,23 @@ namespace AdminClient.Views
                 DropdownPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1d2127"));
                 MenuPic.Source = new BitmapImage(new Uri("/Resources/arrowUP.png", UriKind.Relative));
             }
-            
-
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("СИГМА", "Сосал?", MessageBoxButton.OKCancel);
+            var result = MessageBox.Show("Вы точно хотите выйти из системы? Все несохраненные изменения будут потеряны!", "Выход из системы", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.Show();
+                this.Close();
+            }
+        }
+
+        private void MainWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageManager.MainFrame.Navigate(new MainPage());
         }
     }
 }

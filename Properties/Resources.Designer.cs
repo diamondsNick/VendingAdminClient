@@ -93,6 +93,26 @@ namespace AdminClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] power {
+            get {
+                object obj = ResourceManager.GetObject("power", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] profile {
+            get {
+                object obj = ResourceManager.GetObject("profile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] ru {
             get {
                 object obj = ResourceManager.GetObject("ru", resourceCulture);
