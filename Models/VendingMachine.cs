@@ -15,10 +15,10 @@ namespace AdminClient.Models
         public long? CompanyID { get; set; }
         public long? ModelID { get; set; }
         public long? ModemID { get; set; }
-        [MaxLength (100)]
+        [MaxLength(100)]
         [Required]
         public string TimeZone { get; set; }
-        [MaxLength (100)]
+        [MaxLength(100)]
         [Required]
         public string Name { get; set; }
         [MaxLength(350)]
@@ -26,8 +26,8 @@ namespace AdminClient.Models
         public string Adress { get; set; }
         [MaxLength(100)]
         [AllowNull]
-        public string Coordinates { get; set; }
-        [MaxLength (100)]
+        public string? Coordinates { get; set; }
+        [MaxLength(100)]
         [Required]
         public string PlacementType { get; set; }
         [MaxLength(19)]
@@ -38,18 +38,18 @@ namespace AdminClient.Models
         public string StartHours { get; set; }
         [MaxLength(5)]
         [Required]
-        public string EndHours { get; set; }
-        public IList<MachinePaymentMethod> MachinePaymentMethods { get; set; }
-        public Status Status { get; set; }
-        public Modem Modem { get; set; }
+        public string? EndHours { get; set; }
+        public IList<MachinePaymentMethod>? MachinePaymentMethods { get; set; }
+        public Status? Status { get; set; }
+        public Modem? Modem { get; set; }
         [JsonIgnore]
-        public IList<Sale> Sales { get; set; }
-        public OperatingMode OperatingMode { get; set; }
+        public IList<Sale>? Sales { get; set; }
+        public OperatingMode? OperatingMode { get; set; }
         [JsonIgnore]
-        public IList<Maintenance> Maintenances { get; set; }
-        public IList<VendingMachineMoney> VendingMachineMoney { get; set; }
-        public IList<VendingAvaliability> VendingAvaliabilities { get; set; }
-        public VendingMachineMatrix VendingMachineMatrix { get; set; }
-        public Company Company { get; set; }
+        public IList<Maintenance>? Maintenances { get; set; }
+        public IList<VendingMachineMoney>? VendingMachineMoney { get; set; }
+        public IList<VendingAvaliability>? VendingAvaliabilities { get; set; }
+        public VendingMachineMatrix? VendingMachineMatrix { get; set; }
+        public Company? Company { get; set; }
     }
 }

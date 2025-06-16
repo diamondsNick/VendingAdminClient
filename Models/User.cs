@@ -15,6 +15,8 @@ namespace AdminClient.Models
         public string? Email { get; set; }
         public long? RoleID { get; set; }
         public Role? Role { get; set; }
+        public string? RegistrationDate { get; set; }
+        public string? Phone { get; set; }
         public long? CompanyID { get; set; }
         public Company? Company { get; set; }
         [MaxLength(10)]

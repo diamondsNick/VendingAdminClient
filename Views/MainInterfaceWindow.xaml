@@ -9,7 +9,7 @@
    MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
    <Grid>
        <Grid.ColumnDefinitions>
-           <ColumnDefinition Width="200"/>
+           <ColumnDefinition Width="200" x:Name="LeftMenuColumn"/>
            <ColumnDefinition/>
        </Grid.ColumnDefinitions>
        <Grid.RowDefinitions>
@@ -17,10 +17,10 @@
            <RowDefinition Height="372*"/>
        </Grid.RowDefinitions>
        <Grid Grid.Row="0" Grid.RowSpan="2" Background="#1d2127"></Grid>
-       <Button Width="30" HorizontalAlignment="Left" Margin="10,0,0,0" BorderThickness="0" Background="Transparent" Height="30" Grid.Column="0" Grid.Row="0">
+        <Button Width="20" Height="20" HorizontalAlignment="Left" Name="LeftMenuBurger" Click="LeftMenuBurger_Click"  Margin="10,0,0,0" BorderThickness="0" Background="Transparent" Grid.Column="0" Grid.Row="0">
            <Image Source="/Resources/burger.png"></Image>  
        </Button>
-       <TextBlock x:Name="CurrentPageTitle" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="17" Foreground="White" Text="Главная"/>
+       <TextBlock x:Name="CurrentPageTitle" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Foreground="White" Text="Главная"/>
        <StackPanel Grid.Row="2" Grid.Column="0" Background="Transparent">
             <Button HorizontalAlignment="Left" Name="MainPage" Click="MainWindowButton_Click"  Background="Transparent" BorderThickness="0" Margin="0,7,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -85,7 +85,7 @@
                <ColumnDefinition Width="17*"/>
                <ColumnDefinition Width="Auto"/>
            </Grid.ColumnDefinitions>
-           <TextBlock x:Name="CompanyNameBox" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Height="29" Width="220" FontSize="24" Foreground="White" Margin="10,0,0,0" Text="ООО Автоматово"/>
+           <TextBlock x:Name="CompanyNameBox" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Height="29" Width="220" FontSize="17" Foreground="White" Margin="10,0,0,0" Text="ООО Автоматово"/>
            <Grid Grid.Column="1">
                <Grid.ColumnDefinitions>
                    <ColumnDefinition Width="Auto"/>

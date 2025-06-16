@@ -13,16 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace AdminClient.Views
 {
-    /// <summary>
-    /// Interaction logic for MainPage.xaml
-    /// </summary>
+    /// <summary>  
+    /// Interaction logic for MainPage.xaml  
+    /// </summary>  
     public partial class MainPage : Page
     {
         public MainPage()
         {
             InitializeComponent();
+
             var mainWindow = Application.Current.Windows
                 .OfType<MainInterfaceWindow>()
                 .FirstOrDefault();
@@ -30,6 +32,19 @@ namespace AdminClient.Views
             {
                 mainWindow.CurrentPageTitle.Text = "Главная";
             }
+            DataContext = this; // Устанавливаем DataContext для привязки Series  
+
+            double[] values = { 3, 7, 5, 2, 9, 4, 6, 1, 8, 5 };
+
+            // Построение гистограммы  
+            var hist = ScottPlot.Statistics.Histogram.WithBinCount(10, values);
+            var barPlot = wpfPlot1.Plot.Add.Bars(hist.Bins, hist.Counts);
+            
+            wpfPlot1.Plot.Title("Пример гистограммы");
+            wpfPlot1.Plot.XLabel("Значения");
+            wpfPlot1.Plot.YLabel("Количество");
+
+            wpfPlot1.Refresh();
         }
     }
 }

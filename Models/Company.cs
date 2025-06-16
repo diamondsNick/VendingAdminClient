@@ -15,6 +15,9 @@ namespace AdminClient.Models
         [Column (TypeName = "decimal(18,2)")]
         [Required]
         public decimal Finances { get; set; }
+        public string? RegistrationDate { get; set; }
+        public string? Adress { get; set; }
+        public string? Phone { get; set; }
         [AllowNull]
         public long? ParentCompanyID { get; set; }
         [JsonIgnore]

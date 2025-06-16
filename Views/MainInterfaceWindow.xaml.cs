@@ -24,7 +24,11 @@ namespace AdminClient.Views
         public MainInterfaceWindow()
         {
             InitializeComponent();
-            
+            Loaded += MainInterfaceWindow_Loaded;
+        }
+
+        private async void MainInterfaceWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             var curUser = Services.LoginOperation.GetCurrentUserAsync().Result;
             CompanyNameBox.Text = "";
             if (curUser.Company.Name != null) CompanyNameBox.Text = curUser.Company.Name;
@@ -39,7 +43,7 @@ namespace AdminClient.Views
 
             if (userInfoArr.Length > 0)
             {
-                UserInfo.Text = userInfoArr[0] + (userInfoArr.Length > 1 ? " "+userInfoArr[1][0]+"." : "") 
+                UserInfo.Text = userInfoArr[0] + (userInfoArr.Length > 1 ? " " + userInfoArr[1][0] + "." : "")
                     + (userInfoArr.Length > 2 ? " " + userInfoArr[2][0] + "." : "");
             }
             if (curUser.Role != null)
@@ -104,6 +108,7 @@ namespace AdminClient.Views
 
         private void OpenAdminDropdownMenu()
         {
+            LeftMenuOpen();
             AdminDropPanel.Visibility = Visibility.Visible;
             AdminDropPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1d2127"));
             AdminMenuPic.Source = new BitmapImage(new Uri("/Resources/arrowUP.png", UriKind.Relative));
@@ -122,7 +127,7 @@ namespace AdminClient.Views
 
         private void VendingAutomats_Click(object sender, RoutedEventArgs e)
         {
-
+            PageManager.MainFrame.Navigate(new VendingMachinesPage());
         }
 
         private void Companies_Click(object sender, RoutedEventArgs e)
@@ -140,6 +145,26 @@ namespace AdminClient.Views
 
         }
 
-        
+        private void LeftMenuBurger_Click(object sender, RoutedEventArgs e)
+        {
+            if (LeftMenuColumn.Width.Value > 40)
+            {
+                LeftMenuClose();
+            }
+            else
+            {
+                LeftMenuOpen();
+            }
+        }
+        private void LeftMenuOpen()
+        {
+            LeftMenuColumn.Width = new GridLength(200);
+            CurrentPageTitle.Visibility = Visibility.Visible;
+        }
+        private void LeftMenuClose()
+        {
+            LeftMenuColumn.Width = new GridLength(40);
+            CurrentPageTitle.Visibility = Visibility.Collapsed;
+        }
     }
 }
