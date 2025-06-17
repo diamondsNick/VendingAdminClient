@@ -12,7 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using OxyPlot;
+using OxyPlot.Wpf;
 
 namespace AdminClient.Views
 {
@@ -24,7 +27,11 @@ namespace AdminClient.Views
         public MainPage()
         {
             InitializeComponent();
+            Loaded += MainPage_Loaded;
+        }
 
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
             var mainWindow = Application.Current.Windows
                 .OfType<MainInterfaceWindow>()
                 .FirstOrDefault();
@@ -32,19 +39,50 @@ namespace AdminClient.Views
             {
                 mainWindow.CurrentPageTitle.Text = "Главная";
             }
-            DataContext = this; // Устанавливаем DataContext для привязки Series  
+            DataContext = this;
 
-            double[] values = { 3, 7, 5, 2, 9, 4, 6, 1, 8, 5 };
+            var model = new PlotModel { Title = "Продажи по регионам" };
 
-            // Построение гистограммы  
-            var hist = ScottPlot.Statistics.Histogram.WithBinCount(10, values);
-            var barPlot = wpfPlot1.Plot.Add.Bars(hist.Bins, hist.Counts);
-            
-            wpfPlot1.Plot.Title("Пример гистограммы");
-            wpfPlot1.Plot.XLabel("Значения");
-            wpfPlot1.Plot.YLabel("Количество");
+            var categoryAxis = new CategoryAxis
+            {
+                Position = AxisPosition.Left, // Ось Y
+                Key = "Category"
+            };
+            categoryAxis.Labels.AddRange(new[] { "Москва", "СПб", "Казань", "Краснодар" });
 
-            wpfPlot1.Refresh();
+
+            var valueAxis = new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Key = "Value"
+            };
+
+
+            var barSeries = new BarSeries
+            {
+                XAxisKey = "Value",
+                YAxisKey = "Category",
+                ItemsSource = new[]
+                {
+                    new BarItem { Value = 15 },
+                    new BarItem { Value = 22 },
+                    new BarItem { Value = 18 },
+                    new BarItem { Value = 12 }
+                },
+                LabelPlacement = LabelPlacement.Inside,
+                LabelFormatString = "{0:.0}"
+            };
+
+
+            model.Axes.Add(categoryAxis);
+            model.Axes.Add(valueAxis);
+            model.Series.Add(barSeries);
+
+            var plotView = new PlotView
+            {
+                Model = model
+            };
+            Content = plotView;
         }
     }
 }

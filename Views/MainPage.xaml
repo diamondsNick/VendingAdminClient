@@ -4,22 +4,33 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:AdminClient.Views"
-    xmlns:scottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
     mc:Ignorable="d" 
+    xmlns:oxy="http://oxyplot.org/wpf"
     d:DesignHeight="372" d:DesignWidth="600"
     MinHeight="372" MinWidth="600"
     Title="MainPage">
     <Grid Background="#d9d9d9">
-      <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="77*"/>
-          <ColumnDefinition Width="73*"/>
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-          <RowDefinition Height="19*"/>
-          <RowDefinition Height="59*"/>
-          <RowDefinition Height="72*"/>
-      </Grid.RowDefinitions>
-      <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="18" Text="Личный кабинет. Главная" VerticalAlignment="Center" Height="32" Width="222"/>
-        <scottPlot:WpfPlot Grid.Column="0" Grid.Row="2" Name="wpfPlot1" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="77*"/>
+            <ColumnDefinition Width="73*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="117*"/>
+            <RowDefinition Height="191*"/>
+            <RowDefinition Height="17*"/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="18" Text="Личный кабинет. Главная" VerticalAlignment="Center" Height="32" Width="222"/>
+        <Border Grid.Row="2" Background="White" Margin="10,10,10,0" CornerRadius="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="59*"/>
+                    <RowDefinition Height="100*"/>
+                </Grid.RowDefinitions>
+                <oxy:PlotView Name="PlotModel" Grid.Row="1" />
+
+            </Grid>
+        </Border>
+
     </Grid>
 </Page>
