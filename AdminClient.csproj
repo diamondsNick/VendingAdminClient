@@ -16,6 +16,7 @@
     <None Remove="Resources\arrowUP.png" />
     <None Remove="Resources\burger.png" />
     <None Remove="Resources\monitor.png" />
+    <None Remove="Resources\pointer.png" />
     <None Remove="Resources\power.png" />
     <None Remove="Resources\profile.png" />
     <None Remove="Resources\search.png" />
@@ -34,6 +35,7 @@
     <Resource Include="Resources\arrowUP.png" />
     <Resource Include="Resources\burger.png" />
     <Resource Include="Resources\monitor.png" />
+    <Resource Include="Resources\pointer.png" />
     <Resource Include="Resources\power.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

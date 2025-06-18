@@ -24,12 +24,12 @@ namespace AdminClient.Views
         public MainInterfaceWindow()
         {
             InitializeComponent();
-            Loaded += MainInterfaceWindow_Loaded;
+            Loaded +=  MainInterfaceWindow_Loaded;
         }
 
         private async void MainInterfaceWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            var curUser = Services.LoginOperation.GetCurrentUserAsync().Result;
+            var curUser = await Services.LoginOperation.GetCurrentUserAsync();
             CompanyNameBox.Text = "";
             if (curUser.Company.Name != null) CompanyNameBox.Text = curUser.Company.Name;
 

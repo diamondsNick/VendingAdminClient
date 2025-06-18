@@ -17,25 +17,25 @@ namespace AdminClient.Models
         public long? ModemID { get; set; }
         [MaxLength(100)]
         [Required]
-        public string TimeZone { get; set; }
+        public string? TimeZone { get; set; }
         [MaxLength(100)]
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [MaxLength(350)]
         [Required]
-        public string Adress { get; set; }
+        public string? Adress { get; set; }
         [MaxLength(100)]
         [AllowNull]
         public string? Coordinates { get; set; }
         [MaxLength(100)]
         [Required]
-        public string PlacementType { get; set; }
+        public string? PlacementType { get; set; }
         [MaxLength(19)]
         [Required]
-        public string PlacementDate { get; set; }
+        public string? PlacementDate { get; set; }
         [MaxLength(5)]
         [Required]
-        public string StartHours { get; set; }
+        public string? StartHours { get; set; }
         [MaxLength(5)]
         [Required]
         public string? EndHours { get; set; }
@@ -45,7 +45,6 @@ namespace AdminClient.Models
         [JsonIgnore]
         public IList<Sale>? Sales { get; set; }
         public OperatingMode? OperatingMode { get; set; }
-        [JsonIgnore]
         public IList<Maintenance>? Maintenances { get; set; }
         public IList<VendingMachineMoney>? VendingMachineMoney { get; set; }
         public IList<VendingAvaliability>? VendingAvaliabilities { get; set; }

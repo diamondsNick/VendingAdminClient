@@ -7,27 +7,73 @@
     mc:Ignorable="d" 
     xmlns:oxy="http://oxyplot.org/wpf"
     d:DesignHeight="372" d:DesignWidth="600"
-    MinHeight="372" MinWidth="600"
+    MinHeight="600" MinWidth="600"
     Title="MainPage">
     <Grid Background="#d9d9d9">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="77*"/>
-            <ColumnDefinition Width="73*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="47*"/>
-            <RowDefinition Height="117*"/>
-            <RowDefinition Height="191*"/>
-            <RowDefinition Height="17*"/>
+            <RowDefinition Height="230"/>
+            <RowDefinition Height="342"/>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="18" Text="Личный кабинет. Главная" VerticalAlignment="Center" Height="32" Width="222"/>
-        <Border Grid.Row="2" Background="White" Margin="10,10,10,0" CornerRadius="5">
+        <Border Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,10,0" Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Width="280" Height="200" >
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="59*"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="100*"/>
                 </Grid.RowDefinitions>
-                <oxy:PlotView Name="PlotModel" Grid.Row="1" />
+                <Border Background="LightGray">
+                    <TextBlock Margin="10" FontSize="19">Эффективность сети</TextBlock>
+                </Border>
+                <oxy:PlotView Name="ArcPlot" Grid.Row="1"/>
+                <Image Name="Pointer" Grid.Row="1" Source="/Resources/pointer.png" Width="30" Height="70" Margin="-5,0,0,50" Panel.ZIndex="1"></Image>
+                <TextBlock x:Name="ArcText" TextAlignment="Center" Grid.Row="1" Panel.ZIndex="1" VerticalAlignment="Center" Margin="0,60,0,0" HorizontalAlignment="Center">Работающих автоматов - 100%</TextBlock>
+            </Grid>
+
+        </Border>
+        <Border Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,10,0" Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Width="280" Height="200" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="100*"/>
+                </Grid.RowDefinitions>
+                <Border Background="LightGray">
+                    <TextBlock Margin="10" FontSize="19">Состояние сети</TextBlock>
+                </Border>
+                <TextBlock x:Name="InsideText" TextAlignment="Center" Grid.Row="1" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center">Текст внутри</TextBlock>
+                <oxy:PlotView Name="MachinePieGraph" Grid.Row="1"/>
+            </Grid>
+            
+        </Border>
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Background="White" Margin="10,10,10,0" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="100*"/>
+                </Grid.RowDefinitions>
+                <Border CornerRadius="5, 5, 0, 0" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2,1,1,1" Grid.Row="0" Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400*"/>
+                            <ColumnDefinition Width="177*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50*"/>
+                            <RowDefinition Height="50*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Margin="10" FontSize="19" Text="Динамика продаж за последние 10 дней" TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2" />
+                        <TextBlock x:Name="DateOfGraphic" Grid.Column="0" Grid.Row="1" Foreground="Gray" Margin="10,0,0,0" FontSize="13" Text="Данные по продажам с 07.06.2025 по 16.06.2025" TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2" />
+                        <Border Name="SumButtonBackground" Width="150" Height="45" Grid.Column="1" Grid.Row="0" CornerRadius="5" Background="DeepSkyBlue" BorderBrush="Gray" BorderThickness="0">
+                            <Button x:Name="SumButton" Click="SumButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="19"  >По сумме</Button>
+                        </Border>
+                        <Border Name="QtyButtonBackground" Width="150" Height="45" Grid.Column="1" Grid.Row="1" CornerRadius="5" Background="White" BorderBrush="Gray" BorderThickness="1">
+                            <Button x:Name="QtyButton" Click="QtyButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="19" >По количеству</Button>
+                        </Border>
+                    </Grid>
+                </Border>
+                <oxy:PlotView Name="GraphVending" Grid.Row="1"/>
 
             </Grid>
         </Border>

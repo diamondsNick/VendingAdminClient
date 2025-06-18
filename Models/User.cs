@@ -23,9 +23,7 @@ namespace AdminClient.Models
         [AllowNull]
         public string Language { get; set; }
         [MaxLength(100)]
-        [JsonIgnore]
         public string? Login { get; set; }
-        [JsonIgnore]
         public string? Password { get; set; }
     }
 }
