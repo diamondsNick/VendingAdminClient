@@ -10,9 +10,7 @@ namespace AdminClient.Models
         public long? ManufacturerID { get; set; }
         [MaxLength (150)]
         public string ModelName { get; set; }
-        [JsonIgnore]
         public IList<VendingMachine> VendingMachines { get; set; }
-        [JsonIgnore]
         public Manufacturer Manufacturer { get; set; }
     }
 }

@@ -85,6 +85,7 @@ namespace AdminClient.Views
         }
         private void GraphBySum(object sender, RoutedEventArgs e)
         {
+            DateOfGraphic.Text = "Данные по продажам с " + DateTime.Now.AddDays(-10).ToString("dd.MM.yyyy") + " по " + DateTime.Now.ToString("dd.MM.yyyy");
             var model = new PlotModel();
 
             var categoryAxis = new CategoryAxis
@@ -220,21 +221,22 @@ namespace AdminClient.Views
 
             var machines = await VendingMachinesService.GetVendingMachinesAsync();
 
-            var questionedAmount = machines.Count(e => e.StatusID == 2);
-            var doesntWork = machines.Count(e => e.StatusID == 1);
-            var works = machines.Count(e => e.StatusID == 3);
+            double questionedAmount = machines.Count(e => e.StatusID == 2);
+            double doesntWork = machines.Count(e => e.StatusID == 1);
+            double works = machines.Count(e => e.StatusID == 3);
             string noWork = "Не работает";
             string workingFine = "Работает";
             var unusuableMachines = doesntWork+questionedAmount;
             var rotateAngle =  (works - unusuableMachines)*8;
             Pointer.RenderTransformOrigin = new Point(0.5, 0.88);
             Pointer.RenderTransform = new RotateTransform(rotateAngle);
-            var workPres = 100;
+            double workPres = 0;
             if (unusuableMachines != 0)
             {
-                workPres = works / unusuableMachines;
+                workPres = (works / (works + unusuableMachines)) * 100;
+                workPres = Math.Round(workPres);
             }
-            
+
             ArcText.Text = "Работающих автоматов - " + workPres + "%";
 
             var pieSeries = new PieSeries

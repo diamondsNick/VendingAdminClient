@@ -50,5 +50,8 @@ namespace AdminClient.Models
         public IList<VendingAvaliability>? VendingAvaliabilities { get; set; }
         public VendingMachineMatrix? VendingMachineMatrix { get; set; }
         public Company? Company { get; set; }
+        public string ModelName => $"{VendingMachineMatrix?.Manufacturer.Name} {VendingMachineMatrix?.ModelName}";
+        public string CompanyName => $"{CompanyID} - \u0022{Company?.Name}\u0022";
+        public string FullAdress => $"{Adress} {PlacementType}";
     }
 }
