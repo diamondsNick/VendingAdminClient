@@ -24,5 +24,6 @@ namespace AdminClient.Models
         public IList<User> CompanyUsers { get; set; }
         [JsonIgnore]
         public IList<VendingMachine> VendingMachines { get; set; }
+        public string? HighCompanyName { get; set; }
     }
 }

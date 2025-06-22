@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AdminClient.Views"
         mc:Ignorable="d"
         Title="Вход в программу" Height="200" Width="450" ScrollViewer.VerticalScrollBarVisibility="Disabled" ResizeMode="NoResize"
-        MinHeight="200" MinWidth="450" WindowStartupLocation="CenterScreen">
+        MinHeight="200" MinWidth="450" WindowStartupLocation="CenterScreen" Icon="/Resources/monitor.png">
     <Grid Background ="#1d2127">
         <Grid.RowDefinitions>
             <RowDefinition Height="86*"/>

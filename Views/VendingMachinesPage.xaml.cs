@@ -115,14 +115,14 @@ namespace AdminClient.Views
             }
             else if (page == 1 && selectedAmount > entityAmount)
             {
-                MachCountFromTo.Text = $"Записи с 1 до {pr.TotalCount.ToString()} из {EntityAmountFound.Text} записей";
+                MachCountFromTo.Text = $"Записи с 1 до {pr.TotalCount.ToString()} из {entityAmount} записей";
             }
             else
             {
                 int entCountOst = 0;
                 if(selectedAmount > entityAmount) entCountOst = entityAmount;
                 else entCountOst = selectedAmount;
-                MachCountFromTo.Text = $"Записи с {page * pageAmount + 1} до {entCountOst} из {EntityAmountFound.Text} записей";
+                MachCountFromTo.Text = $"Записи с {page * pageAmount + 1} до {entCountOst} из {entityAmount} записей";
             }
                 
         }
@@ -228,8 +228,27 @@ namespace AdminClient.Views
                         machine.ModemID = null;
                         machine.Modem = null;
 
-                        var returnedResult = await Services.VendingMachinesService.UpdateVendingMachineAsync(machine.ID, machine);
-                        if (returnedResult)
+                        var vendingM = new VendingMachineCreateDTO()
+                        {
+                            Name = machine.Name,
+                            ID = machine.ID,
+                            StatusID = 2,
+                            OperatingModeID = machine.OperatingModeID,
+                            PlacementType = machine.PlacementType,
+                            Adress = machine.Adress,
+                            StartHours = machine.StartHours,
+                            EndHours = machine.EndHours,
+                            TimeZone = machine.TimeZone,
+                            CompanyID = machine.CompanyID,
+                            Coordinates = machine.Coordinates,
+                            PlacementDate = machine.PlacementDate,
+                            ModelID = machine.VendingMachineMatrix.ID,
+                            ModemID = machine.ModemID
+                        };
+
+
+                        var returnedResult = await Services.VendingMachinesService.UpdateVendingMachineAsync(vendingM.ID, vendingM);
+                        if (returnedResult.ID != null)
                         {
                             MessageBox.Show("Торговый автомат успешно отвязан.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                         }

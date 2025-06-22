@@ -8,34 +8,33 @@ using Newtonsoft.Json;
 
 namespace AdminClient.Services
 {
-    class MachineModelService
+    class RoleService
     {
-        public static async Task<VendingMachineMatrix[]> GetVendingMachineMatricesAsync()
+        public static async Task<Role[]> GetRolesAsync()
         {
             try
             {
-                string url = APILinking.BaseUrl + $"VendingMachineMatrix";
+                string url = APILinking.BaseUrl + $"Role";
 
                 var response = await APIHttpClient.Instance.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    var matrices = JsonConvert.DeserializeObject<VendingMachineMatrix[]>(jsonResponse);
-                    if (matrices != null) return matrices;
-                    return Array.Empty<VendingMachineMatrix>();
+                    var roles = JsonConvert.DeserializeObject<Role[]>(jsonResponse);
+                    if (roles != null) return roles;
+                    return Array.Empty<Role>();
                 }
                 else
                 {
-                    return Array.Empty<VendingMachineMatrix>();
+                    return Array.Empty<Role>();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return Array.Empty<VendingMachineMatrix>();
+                return Array.Empty<Role>();
             }
         }
-
     }
 }

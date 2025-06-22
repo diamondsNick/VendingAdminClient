@@ -79,39 +79,51 @@ namespace AdminClient.Services
                 return false;
             }
         }
-        public static async Task<bool> UpdateVendingMachineAsync(long ID, VendingMachine machine)
+        public static async Task<VendingMachineCreateDTO?> UpdateVendingMachineAsync(long id, VendingMachineCreateDTO machineDto)
         {
             try
             {
-                string url = APILinking.BaseUrl + $"VendingMachine/{ID}";
+                string url = APILinking.BaseUrl + $"VendingMachine/{id}";
 
-                var json = JsonConvert.SerializeObject(machine);
+                var json = JsonConvert.SerializeObject(machineDto);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = await APIHttpClient.Instance.PutAsync(url, content);
 
-                return response.IsSuccessStatusCode;
+                if (!response.IsSuccessStatusCode)
+                    return null;
 
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var updatedMachine = JsonConvert.DeserializeObject<VendingMachineCreateDTO>(responseBody);
+                return updatedMachine;
             }
-            catch (Exception ex)
+            catch
             {
-                return false;
+                return null;
             }
         }
-        public static async Task<bool> CreateVendingMachineAsync(VendingMachine machine)
+
+        public static async Task<VendingMachineCreateDTO?> CreateVendingMachineAsync(VendingMachineCreateDTO machine)
         {
             try
             {
-                string url = APILinking.BaseUrl + $"VendingMachine";
+                string url = APILinking.BaseUrl + "VendingMachine";
                 var json = JsonConvert.SerializeObject(machine);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+
                 var response = await APIHttpClient.Instance.PostAsync(url, content);
-                return response.IsSuccessStatusCode;
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var createdMachine = JsonConvert.DeserializeObject<VendingMachineCreateDTO>(responseBody);
+                return createdMachine;
             }
-            catch (Exception ex)
+            catch
             {
-                return false;
+                return null;
             }
         }
+
     }
 }

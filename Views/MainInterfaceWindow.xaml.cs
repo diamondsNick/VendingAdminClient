@@ -132,12 +132,12 @@ namespace AdminClient.Views
 
         private void Companies_Click(object sender, RoutedEventArgs e)
         {
-
+            PageManager.MainFrame.Navigate(new CompaniesPage());
         }
 
         private void Users_Click(object sender, RoutedEventArgs e)
         {
-
+            PageManager.MainFrame.Navigate(new UsersPage());
         }
 
         private void Modems_Click(object sender, RoutedEventArgs e)

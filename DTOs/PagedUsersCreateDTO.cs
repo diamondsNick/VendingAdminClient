@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using AdminClient.Models;
 
-namespace AdminClient.Models
+namespace AdminClient.DTOs
 {
-    public class User
+    class PagedUsersCreateDTO
     {
         public long? ID { get; set; }
         [MaxLength(100)]
@@ -14,18 +17,14 @@ namespace AdminClient.Models
         [MaxLength(100)]
         public string? Email { get; set; }
         public long? RoleID { get; set; }
-        public Role? Role { get; set; }
         public string? RegistrationDate { get; set; }
         public string? Phone { get; set; }
         public long? CompanyID { get; set; }
-        public Company? Company { get; set; } 
         [MaxLength(10)]
         [AllowNull]
         public string Language { get; set; }
         [MaxLength(100)]
         public string? Login { get; set; }
         public string? Password { get; set; }
-        public string CompanyName => Company is not null ? $"{Company.ID} - \"{Company.Name}\"" : "Нет записи";
-
     }
 }

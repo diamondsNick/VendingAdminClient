@@ -136,19 +136,19 @@
                             <StackPanel Orientation="Horizontal">
                                 
                                 <Grid Margin="5,0,0,0">
-                                    <CheckBox x:Name="CoinBox" IsChecked="{Binding CoinSlot, Mode=TwoWay}" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="CoinBox" Checked="CoinBox_Checked" Unchecked="CoinBox_Unchecked" IsChecked="{Binding CoinSlot, Mode=TwoWay}" VerticalAlignment="Center"></CheckBox>
                                     <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="10">Монетопр.</TextBlock>
                                 </Grid>
                                 <Grid Margin="5,0,0,0">
-                                    <CheckBox x:Name="BankNotesBox" IsChecked="{Binding BankNotesSlot, Mode=TwoWay}"  VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="BankNotesBox" Checked="BankNotesBox_Checked" Unchecked="BankNotesBox_Unchecked" IsChecked="{Binding BankNotesSlot, Mode=TwoWay}"  VerticalAlignment="Center"></CheckBox>
                                     <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="10">Купюропр.</TextBlock>
                                 </Grid>
                                 <Grid Margin="5,0,0,0">
-                                    <CheckBox x:Name="NoContactBox" IsChecked="{Binding NoContactPaymentSlot, Mode=TwoWay}"  VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="NoContactBox" Checked="NoContactBox_Checked"  Unchecked="NoContactBox_Unchecked" IsChecked="{Binding NoContactPaymentSlot, Mode=TwoWay}"  VerticalAlignment="Center"></CheckBox>
                                     <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="10">Модуль б/н опл.</TextBlock>
                                 </Grid>
                                 <Grid Margin="5,0,0,0">
-                                    <CheckBox x:Name="QRBox" IsChecked="{Binding QRCode, Mode=TwoWay}" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="QRBox" Checked="QRBox_Checked" Unchecked="QRBox_Unchecked" IsChecked="{Binding QRCode, Mode=TwoWay}" VerticalAlignment="Center"></CheckBox>
                                     <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="10">QR платежи</TextBlock>
                                 </Grid>
                             </StackPanel>
