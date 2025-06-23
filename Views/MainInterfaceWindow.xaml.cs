@@ -142,7 +142,7 @@ namespace AdminClient.Views
 
         private void Modems_Click(object sender, RoutedEventArgs e)
         {
-
+            PageManager.MainFrame.Navigate(new ModemsPage());
         }
 
         private void LeftMenuBurger_Click(object sender, RoutedEventArgs e)
