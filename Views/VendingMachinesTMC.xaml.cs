@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,19 +20,18 @@ using AdminClient.Services;
 
 namespace AdminClient.Views
 {
-    /// <summary>
-    /// Interaction logic for CompaniesPage.xaml
-    /// </summary>
-    public partial class CompaniesPage : Page
+    /// <summary>  
+    /// Interaction logic for VendingMachinesPage.xaml  
+    /// </summary>  
+    public partial class VendingMachinesTMC : Page
     {
         public static int page = 1;
         public static int pageAmount = 0;
         public static int selectedAmount;
         public static int entityAmount = 0;
         public static int objOnPage = 0;
-        public static string HigherCompanyName;
-        PagedCompanies? Companies { get; set; }
-        public CompaniesPage()
+        public PagedMachinesResult? vendingMachines { get; set; }
+        public VendingMachinesTMC()
         {
             InitializeComponent();
             Loaded += LoadPageStuff;
@@ -42,45 +43,35 @@ namespace AdminClient.Views
                 .FirstOrDefault();
             if (mainWindow != null)
             {
-                mainWindow.CurrentPageTitle.Text = "Компании";
+                mainWindow.CurrentPageTitle.Text = "Учет ТМЦ";
             }
             foreach (var column in DataGridTable.Columns)
             {
                 column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
             }
 
-            await LoadCompanyData();
+            await LoadMachineData();
         }
 
-        private async Task LoadCompanyData()
+        private async Task LoadMachineData()
         {
             var curUser = await Services.LoginOperation.GetCurrentUserAsync();
-
 
             if (curUser?.CompanyID == null)
             {
                 return;
             }
 
-            HigherCompanyName = curUser.Company?.Name ?? "Нет информации";
-
             UpdateAmountOnBox();
 
-            Companies = await Services.CompanyService.GetPagedCompaniesAsync(selectedAmount, page, (long)curUser.CompanyID);
-
-            if (Companies != null)
+            vendingMachines = 
+                await Services.VendingMachinesService.GetVendingMachinesPagedAsync((long)curUser.CompanyID, selectedAmount, page);
+            if (vendingMachines != null)
             {
-                NoDataMessage.Visibility = Visibility.Hidden;
-                UpdatePageCounters(Companies);
-
-                foreach (var company in Companies.Companies)
-                {
-                    company.HighCompanyName = HigherCompanyName;
-                }
+                NoDataMessage.Visibility = Visibility.Collapsed;
+                UpdatePageCounters(vendingMachines);
+                DataGridTable.ItemsSource = vendingMachines?.VendingMachines;
             }
-            else NoDataMessage.Visibility = Visibility.Visible;
-            DataGridTable.ItemsSource = Companies?.Companies;
-
         }
         private void UpdateAmountOnBox()
         {
@@ -98,14 +89,15 @@ namespace AdminClient.Views
         private async void ValueBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateAmountOnBox();
-            await LoadCompanyData();
+            await LoadMachineData();
         }
 
-        private void UpdatePageCounters(PagedCompanies pr)
+        private void UpdatePageCounters(PagedMachinesResult pr)
         {
+
             PageNum.Text = page.ToString();
             entityAmount = pr.TotalCount;
-            objOnPage = pr.Companies.Count();
+            objOnPage = pr.VendingMachines.Count();
             EntityAmountFound.Text = $"Всего найдено {entityAmount} шт.";
 
             if (selectedAmount > entityAmount)
@@ -132,17 +124,12 @@ namespace AdminClient.Views
 
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageManager.MainFrame.Navigate(new CompanyPage(new()));
-        }
-
         private async void PrevPage_Click(object sender, RoutedEventArgs e)
         {
-            if (page > 1 && pageAmount > 1)
+            if(page > 1 && pageAmount > 1)
             {
                 page--;
-                await LoadCompanyData();
+                await LoadMachineData();
             }
         }
 
@@ -151,7 +138,7 @@ namespace AdminClient.Views
             if (page >= 1 && pageAmount > 1)
             {
                 page++;
-                await LoadCompanyData();
+                await LoadMachineData();
             }
         }
 
@@ -163,63 +150,38 @@ namespace AdminClient.Views
         private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var tbx = sender as TextBox;
-            if (Companies?.Companies == null)
+            if (vendingMachines?.VendingMachines == null)
                 return;
             if (tbx.Text != "")
             {
-                var filtered = Companies.Companies.Where(vm =>
+                var filtered = vendingMachines.VendingMachines.Where(vm =>
+                vm.ID.ToString().Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
                 vm.Name.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.Adress.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.Phone.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.RegistrationDate.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase)
+                vm.ModelName.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
+                vm.CompanyName.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
+                vm.ModelID.ToString().Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
+                vm.FullAdress.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
+                vm.PlacementDate.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase)
                 )
                     .ToList();
                 DataGridTable.ItemsSource = filtered;
             }
             else
             {
-                DataGridTable.ItemsSource = Companies.Companies;
+                DataGridTable.ItemsSource = vendingMachines.VendingMachines;
             }
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private void DataGridTable_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Button button && button.DataContext is Company company)
+            if (sender is DataGrid grid)
             {
-                PageManager.MainFrame.Navigate(new CompanyPage(company));
-            }
-        }
+                if(grid.SelectedItem != null && grid.SelectedItem is VendingMachine va)
+                { 
 
-        private async void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.DataContext is Company selectedCompany)
-            {
-                var result = MessageBox.Show($"Вы точно хотите удалить {selectedCompany.Name}?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        var returnedResult = await CompanyService.DeleteCompanyAsync(selectedCompany.ID);
-                        if (returnedResult)
-                        {
-                            MessageBox.Show("Компания успешно удалена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Не удалось удалить компанию. Возможно, он используется в других операциях.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Не удалось удалить компанию.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    
+                    PageManager.MainFrame.Navigate(new VendingMachineTMC(va));
                 }
             }
-            await LoadCompanyData();
         }
-
     }
 }

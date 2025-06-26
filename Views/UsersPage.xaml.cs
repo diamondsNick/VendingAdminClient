@@ -27,6 +27,7 @@ namespace AdminClient.Views
         public static int pageAmount = 0;
         public static int selectedAmount;
         public static int entityAmount = 0;
+        public static int objOnPage = 0;
         User curUser { get; set; }
         PagedUsers? Users { get; set; }
         public UsersPage()
@@ -97,9 +98,8 @@ namespace AdminClient.Views
         {
             PageNum.Text = page.ToString();
             entityAmount = pr.TotalCount;
-
+            objOnPage = pr.Users.Count();
             EntityAmountFound.Text = $"Всего найдено {entityAmount} шт.";
-
 
             if (selectedAmount > entityAmount)
             {
@@ -110,23 +110,18 @@ namespace AdminClient.Views
                 pageAmount = (int)Math.Ceiling((double)entityAmount / selectedAmount);
             }
 
-
             if (pr.TotalCount == 0)
             {
                 MachCountFromTo.Text = "Записи с 0 до 0 из 0 записей";
             }
-            else if (page == 1 && selectedAmount > entityAmount)
+            else if (entityAmount < selectedAmount)
             {
-                MachCountFromTo.Text = $"Записи с 1 до {pr.TotalCount.ToString()} из {entityAmount} записей";
+                MachCountFromTo.Text = $"Записи с 1 до {objOnPage} из {entityAmount} записей";
             }
             else
             {
-                int entCountOst = 0;
-                if (selectedAmount > entityAmount) entCountOst = entityAmount;
-                else entCountOst = selectedAmount;
-                MachCountFromTo.Text = $"Записи с {page * pageAmount + 1} до {entCountOst} из {entityAmount} записей";
+                MachCountFromTo.Text = $"Записи с {page * selectedAmount - selectedAmount + 1} до {selectedAmount*(page-1) + objOnPage} из {entityAmount} записей";
             }
-
         }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -144,7 +139,7 @@ namespace AdminClient.Views
 
         private async void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (page >= 1 && pageAmount > 1)
+            if (page >= 1 && pageAmount > 1 && page < pageAmount)
             {
                 page++;
                 await LoadCompanyData();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,18 +20,18 @@ using AdminClient.Services;
 namespace AdminClient.Views
 {
     /// <summary>
-    /// Interaction logic for CompaniesPage.xaml
+    /// Interaction logic for ProductsPage.xaml
     /// </summary>
-    public partial class CompaniesPage : Page
+    public partial class ProductsPage : Page
     {
         public static int page = 1;
         public static int pageAmount = 0;
         public static int selectedAmount;
         public static int entityAmount = 0;
         public static int objOnPage = 0;
-        public static string HigherCompanyName;
-        PagedCompanies? Companies { get; set; }
-        public CompaniesPage()
+        User curUser { get; set; }
+        ProductDTO product { get; set; }
+        public ProductsPage()
         {
             InitializeComponent();
             Loaded += LoadPageStuff;
@@ -42,19 +43,19 @@ namespace AdminClient.Views
                 .FirstOrDefault();
             if (mainWindow != null)
             {
-                mainWindow.CurrentPageTitle.Text = "Компании";
+                mainWindow.CurrentPageTitle.Text = "Товары";
             }
             foreach (var column in DataGridTable.Columns)
             {
                 column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
             }
 
-            await LoadCompanyData();
+            await LoadProductData();
         }
 
-        private async Task LoadCompanyData()
+        private async Task LoadProductData()
         {
-            var curUser = await Services.LoginOperation.GetCurrentUserAsync();
+            curUser = await LoginOperation.GetCurrentUserAsync();
 
 
             if (curUser?.CompanyID == null)
@@ -62,24 +63,17 @@ namespace AdminClient.Views
                 return;
             }
 
-            HigherCompanyName = curUser.Company?.Name ?? "Нет информации";
-
             UpdateAmountOnBox();
 
-            Companies = await Services.CompanyService.GetPagedCompaniesAsync(selectedAmount, page, (long)curUser.CompanyID);
+            product = await ProductService.GetProductsAsync(selectedAmount, page);
 
-            if (Companies != null)
+            if (product != null)
             {
                 NoDataMessage.Visibility = Visibility.Hidden;
-                UpdatePageCounters(Companies);
-
-                foreach (var company in Companies.Companies)
-                {
-                    company.HighCompanyName = HigherCompanyName;
-                }
+                UpdatePageCounters(product);
             }
             else NoDataMessage.Visibility = Visibility.Visible;
-            DataGridTable.ItemsSource = Companies?.Companies;
+            DataGridTable.ItemsSource = product.Products;
 
         }
         private void UpdateAmountOnBox()
@@ -98,14 +92,14 @@ namespace AdminClient.Views
         private async void ValueBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateAmountOnBox();
-            await LoadCompanyData();
+            await LoadProductData();
         }
 
-        private void UpdatePageCounters(PagedCompanies pr)
+        private void UpdatePageCounters(ProductDTO pr)
         {
             PageNum.Text = page.ToString();
             entityAmount = pr.TotalCount;
-            objOnPage = pr.Companies.Count();
+            objOnPage = pr.Products.Count();
             EntityAmountFound.Text = $"Всего найдено {entityAmount} шт.";
 
             if (selectedAmount > entityAmount)
@@ -129,12 +123,10 @@ namespace AdminClient.Views
             {
                 MachCountFromTo.Text = $"Записи с {page * selectedAmount - selectedAmount + 1} до {selectedAmount * (page - 1) + objOnPage} из {entityAmount} записей";
             }
-
         }
-
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            PageManager.MainFrame.Navigate(new CompanyPage(new()));
+            PageManager.MainFrame.Navigate(new ProductPage(new()));
         }
 
         private async void PrevPage_Click(object sender, RoutedEventArgs e)
@@ -142,16 +134,16 @@ namespace AdminClient.Views
             if (page > 1 && pageAmount > 1)
             {
                 page--;
-                await LoadCompanyData();
+                await LoadProductData();
             }
         }
 
         private async void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (page >= 1 && pageAmount > 1)
+            if (page >= 1 && pageAmount > 1 && page < pageAmount)
             {
                 page++;
-                await LoadCompanyData();
+                await LoadProductData();
             }
         }
 
@@ -162,64 +154,66 @@ namespace AdminClient.Views
 
         private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!IsInitialized)
+                return;
+
             var tbx = sender as TextBox;
-            if (Companies?.Companies == null)
+            if (product.Products == null)
                 return;
             if (tbx.Text != "")
             {
-                var filtered = Companies.Companies.Where(vm =>
+                var filtered = product.Products.Where(vm =>
+                vm.ID.ToString().Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
                 vm.Name.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.Adress.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.Phone.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.RegistrationDate.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase)
+                vm.Description.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
+                vm.AvgSales.ToString().Contains(tbx.Text, StringComparison.OrdinalIgnoreCase)
                 )
                     .ToList();
                 DataGridTable.ItemsSource = filtered;
             }
             else
             {
-                DataGridTable.ItemsSource = Companies.Companies;
+                DataGridTable.ItemsSource = product.Products;
             }
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is Company company)
+            if (sender is Button button && button.DataContext is Product product)
             {
-                PageManager.MainFrame.Navigate(new CompanyPage(company));
+                PageManager.MainFrame.Navigate(new ProductPage(product));
             }
         }
 
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is Company selectedCompany)
+            if (sender is Button button && button.DataContext is Product product)
             {
-                var result = MessageBox.Show($"Вы точно хотите удалить {selectedCompany.Name}?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var result = MessageBox.Show($"Вы точно хотите удалить {product.Name}?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     try
                     {
-                        var returnedResult = await CompanyService.DeleteCompanyAsync(selectedCompany.ID);
+                        var returnedResult = await ProductService.DeleteProductAsync(product.ID);
                         if (returnedResult)
                         {
-                            MessageBox.Show("Компания успешно удалена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                            MessageBox.Show("Товар успешно удален.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
-                            MessageBox.Show("Не удалось удалить компанию. Возможно, он используется в других операциях.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Не удалось удалить Товар. Возможно, он используется в других операциях.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
                     }
                     catch
                     {
-                        MessageBox.Show("Не удалось удалить компанию.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Не удалось удалить Товар.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    
+
                 }
             }
-            await LoadCompanyData();
+            await LoadProductData();
         }
-
     }
 }

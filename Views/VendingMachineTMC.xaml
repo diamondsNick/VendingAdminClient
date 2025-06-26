@@ -1,0 +1,102 @@
+﻿<Page x:Class="AdminClient.Views.VendingMachineTMC"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+     xmlns:local="clr-namespace:AdminClient.Views"
+     mc:Ignorable="d" 
+     
+     MinHeight="600" MinWidth="900"
+     Title="Торговые автоматы">
+
+    <Grid Background="#d9d9d9">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="53*"/>
+            <ColumnDefinition Width="816*"/>
+            <ColumnDefinition Width="31*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="344*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Margin="0,11,0,16" Grid.RowSpan="3">
+            <Border Grid.RowSpan="4" Grid.Column="1" Background="White" CornerRadius="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="445*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Background="#f6f6f6" BorderBrush="DeepSkyBlue" BorderThickness="0,2,0,0.5"
+                           CornerRadius="5,5,0,0" Grid.ColumnSpan="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="21*"/>
+                                <RowDefinition Height="17*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="5,0,5,0" VerticalAlignment="Center" FontSize="17" Foreground="DeepSkyBlue">Товарно-материальные ценности</TextBlock>
+                            <TextBlock Name="EntityAmountFound" Grid.Row="1" FontSize="10" Margin="6,0,0,0">Всего найдено 0 шт.</TextBlock>
+                        </Grid>
+                    </Border>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="187,0,0,0">
+                        <TextBox x:Name="FilterBox" Grid.Column="1" GotFocus="FilterBox_GotFocus" TextChanged="FilterBox_TextChanged" Grid.Row="1" Text="Фильтр" BorderBrush="Gray" Width="170" BorderThickness="1" Height="26" VerticalAlignment="Center"
+                                FontSize="13" Padding="5,2,0,0" HorizontalAlignment="Center" />
+                    </Grid>
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Width="150" Height="26" CornerRadius="3" BorderThickness="1" BorderBrush="Gray" Background="LightGray">
+                        <Button x:Name="ProductButton" Click="ProductButton_Click" >🛒Товары</Button>
+                    </Border>
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Width="150" Height="26" CornerRadius="3" BorderThickness="1" BorderBrush="Gray" Background="LightGray">
+                        <Button x:Name="AddButton" Click="AddButton_Click">➕Добавить</Button>
+                    </Border>
+                    <Border x:Name="NoDataMessage"
+                            Margin="10,10,10,10"
+                            Grid.Column="0" Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Background="White"
+                            Panel.ZIndex="1">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">В таблице отсутствуют данные</TextBlock>
+                    </Border>
+                    <DataGrid Name="DataGridTable" ItemsSource="{Binding VendingMachines}" 
+                         AutoGenerateColumns="False"
+                         GridLinesVisibility="None" 
+                         IsReadOnly="True"
+                         Margin="10,10,10,10"
+                         Grid.Column="0" Grid.Row="2"
+                         Grid.ColumnSpan="3">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID записи" Binding="{Binding ID}" Width="Auto"/>
+                            <DataGridTextColumn Header="Название продукта" Binding="{Binding Name}" Width="Auto" />
+                            <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" Width="Auto"/>
+                            <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="Auto"/>
+                            
+                            <DataGridTemplateColumn Header="Действия">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button x:Name="Edit" Click="Edit_Click" Margin="2" Width="30" Height="30" Background="Transparent" BorderBrush="#d9d9d9" BorderThickness="1">
+                                                <TextBlock TextAlignment="Center" Text="✏️" FontSize="16"/>
+                                            </Button>
+                                            <Button x:Name="Delete" Click="Delete_Click" Margin="2" Width="30" Height="30" Background="Transparent" BorderBrush="#d9d9d9" BorderThickness="1">
+                                                <TextBlock TextAlignment="Center" Text="🗑️" FontSize="16"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Page>

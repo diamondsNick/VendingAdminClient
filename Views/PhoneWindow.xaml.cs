@@ -43,11 +43,12 @@ namespace AdminClient.Views
             if (sim.ID == 0)
             {
                 isNewSim = true;
-                ConfigureNewModem();
+                ConfigureNewSim();
             }
         }
-        private async void ConfigureNewModem()
+        private async void ConfigureNewSim()
         {
+            DeleteButton.Visibility = Visibility.Collapsed;
             PageName.Text = "Создание SIM";
             sim = new SimCard();
             DataContext = sim;
@@ -61,10 +62,7 @@ namespace AdminClient.Views
             var res = MessageBox.Show("Вы уверены, что хотите отменить создание/редактирование SIM?", "Отмена", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes)
             {
-                if (PageManager.MainFrame.CanGoBack)
-                {
-                    PageManager.MainFrame.GoBack();
-                }
+                Close();
             }
         }
 
@@ -82,14 +80,10 @@ namespace AdminClient.Views
                         throw new();
                     }
                     MessageBox.Show("SIM успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    if (PageManager.MainFrame.CanGoBack)
-                    {
-                        PageManager.MainFrame.Navigate(new ModemsPage());
-                    }
+                    Close();
                 }
                 else
                 {
-
                     if (sim.Number == null) throw new();
                     else if (sim.Vendor == null) throw new();
                     var res = await SIMService.UpdateSIMAsync(sim.ID, sim);
@@ -98,10 +92,7 @@ namespace AdminClient.Views
                         throw new();
                     }
                     MessageBox.Show("SIM успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    if (PageManager.MainFrame.CanGoBack)
-                    {
-                        PageManager.MainFrame.Navigate(new ModemsPage());
-                    }
+                    Close();
                 }
             }
             catch
@@ -109,6 +100,24 @@ namespace AdminClient.Views
                 MessageBox.Show("Произошла ошибка при сохранении SIM. Пожалуйста, проверьте введенные данные и повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+        }
+
+        private async void DeleteSim_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var res = await SIMService.DeleteSimAsync(sim.ID);
+                if (res == false)
+                {
+                    throw new();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Произошла ошибка при удалении SIM. Пожалуйста, повторите попытку позже.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            Close();
         }
     }
 }

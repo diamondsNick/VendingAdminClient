@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AdminClient.DTOs;
 using AdminClient.Models;
 using AdminClient.Services;
 
@@ -26,15 +27,13 @@ namespace AdminClient.Views
         bool isNewModem = false;
         User curUser;
         Modem modem;
-
+        PagedSimCards sims;
         public ModemPage(Modem modemInfo)
         {
 
             InitializeComponent();
 
             modem = modemInfo;
-
-            DataContext = modem;
 
             GetEssentialStuff();
         }
@@ -52,6 +51,34 @@ namespace AdminClient.Views
                 isNewModem = true;
                 ConfigureNewModem();
             }
+
+            LoadSimData();
+        }
+        private async void LoadSimData()
+        {
+            sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID);
+
+            if (!isNewModem)
+            {
+                SimCard conSim = sims.Sims.FirstOrDefault(s => s.ID == modem.SimCardID);
+
+                sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, true);
+
+                if (conSim != null && conSim.ID != 0)
+                {
+                    sims.Sims.Add(conSim);
+                }
+
+            }
+            if (isNewModem)
+            {
+                sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, true);
+            }
+
+            SimIDBox.DisplayMemberPath = "Number";
+            SimIDBox.SelectedValuePath = "ID";
+            SimIDBox.ItemsSource = sims.Sims;
+            DataContext = modem;
         }
         private async void ConfigureNewModem()
         {
@@ -119,19 +146,46 @@ namespace AdminClient.Views
             }
         }
 
-        private void RemoveSim_Click(object sender, RoutedEventArgs e)
+        private async void RemoveSim_Click(object sender, RoutedEventArgs e)
         {
-
+            modem.SimCardID = null;
+            try
+            {
+                var res = await ModemService.UpdateModemAsync(modem.ID, modem);
+                if (res == false)
+                {
+                    throw new();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Произошла ошибка при отвязки SIM-карты от модема. Пожалуйста, повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            
+            LoadSimData();
         }
 
         private void AddSim_Click(object sender, RoutedEventArgs e)
         {
+            var window = new PhoneWindow(new SimCard());
 
+            bool? result = window.ShowDialog();
+
+            LoadSimData();
         }
 
         private void RedactSim_Click(object sender, RoutedEventArgs e)
         {
+            var redSim = sims.Sims.FirstOrDefault(s => s.ID == modem.SimCardID);
+            if (redSim != null && redSim.ID != 0)
+            {
+                var window = new PhoneWindow(redSim);
 
+                bool? result = window.ShowDialog();
+
+                LoadSimData();
+            }
         }
     }
 }

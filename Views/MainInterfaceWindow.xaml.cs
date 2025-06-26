@@ -97,7 +97,7 @@ namespace AdminClient.Views
 
         private void MonitorTA_Click(object sender, RoutedEventArgs e)
         {
-
+            PageManager.MainFrame.Navigate(new MonitorVendingMachinesPage());
         }
 
         private void Administrate_Click(object sender, RoutedEventArgs e)
@@ -122,7 +122,7 @@ namespace AdminClient.Views
 
         private void CountingTMC_Click(object sender, RoutedEventArgs e)
         {
-
+            PageManager.MainFrame.Navigate(new VendingMachinesTMC());
         }
 
         private void VendingAutomats_Click(object sender, RoutedEventArgs e)

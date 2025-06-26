@@ -265,5 +265,10 @@ namespace AdminClient.Views
                 }
             }
         }
+
+        private void DataGridTable_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

@@ -87,7 +87,7 @@ Title="ModemPage">
                             <RowDefinition Height="13*"/>
                         </Grid.RowDefinitions>
                         <TextBlock VerticalAlignment="Bottom" Margin="10,0,0,0">Телефон*</TextBlock>
-                        <ComboBox x:Name="SimIDBox" Text="{Binding SimCardID, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="10"></ComboBox>
+                        <ComboBox x:Name="SimIDBox" SelectedValue="{Binding SimCardID, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="10"></ComboBox>
                     </Grid>
                     <Button x:Name="RemoveSim" Click="RemoveSim_Click" BorderBrush="Gray" BorderThickness="1" Grid.Column="1" Grid.Row="3" Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
                         ❌

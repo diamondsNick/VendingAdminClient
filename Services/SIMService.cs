@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using AdminClient.DTOs;
 using AdminClient.Models;
 using Newtonsoft.Json;
@@ -38,7 +39,31 @@ namespace AdminClient.Services
                 return Array.Empty<SimCard>();
             }
         }
+        public static async Task<PagedSimCards?> GetPagedSimsAsync(long Amount, long Page, long CompanyID = 0, bool linked = false)
+        {
+            try
+            {
+                string url = APILinking.BaseUrl + $"SimCard/{Amount}/{Page}?CompanyId={CompanyID}&linked={linked}";
 
+                var response = await APIHttpClient.Instance.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var sims = JsonConvert.DeserializeObject<PagedSimCards>(jsonResponse);
+                    return sims;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
+        }
         public static async Task<bool> DeleteSimAsync(long id)
         {
             try

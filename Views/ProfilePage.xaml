@@ -23,8 +23,8 @@
         <Border  Grid.Row="1" Background="White" Margin="10,10,10,10" CornerRadius="5" MinWidth="190" Grid.Column="0" BorderThickness="1" BorderBrush="Gray">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
