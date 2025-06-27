@@ -25,11 +25,21 @@ namespace AdminClient.Views
     /// </summary>  
     public partial class MonitorVendingMachinesPage : Page
     {
-        public static int page = 1;
-        public static int pageAmount = 0;
-        public static int selectedAmount;
         public static int entityAmount = 0;
+        List<VendingMachineMonitorDTO> vendingMachineMonitorDTOs = new List<VendingMachineMonitorDTO>();
+        List<VendingMachineMonitorDTO> filteredInfo = new List<VendingMachineMonitorDTO>();
         public PagedMachinesResult? vendingMachines { get; set; }
+        public PagedSimCards pagedSimCards { get; set; }
+        public Money[] possiblyStoredMoney { get; set; }
+        public PaymentMethod[]? pms { get; set; }
+        public string filterWords { get; set; }
+        public bool isWorkingStatus { get; set; } = false;
+        public bool isNotWorkingStatus { get; set; } = false;
+        public bool isUnknownStatus { get; set; } = false;
+        public bool isCashFiltered { get; set; } = false;
+        public bool isMoneyFiltered { get; set; } = false;
+        public bool isCardFiltered { get; set; } = false;
+        public bool isQRFiltered { get; set; } = false;
         public MonitorVendingMachinesPage()
         {
             InitializeComponent();
@@ -42,7 +52,7 @@ namespace AdminClient.Views
                 .FirstOrDefault();
             if (mainWindow != null)
             {
-                mainWindow.CurrentPageTitle.Text = "Торговые автоматы";
+                mainWindow.CurrentPageTitle.Text = "Монитор ТА";
             }
             foreach (var column in DataGridTable.Columns)
             {
@@ -61,92 +71,106 @@ namespace AdminClient.Views
                 return;
             }
 
-            UpdateAmountOnBox();
-
             vendingMachines = 
-                await Services.VendingMachinesService.GetVendingMachinesPagedAsync((long)curUser.CompanyID, selectedAmount, page);
+                await Services.VendingMachinesService.GetVendingMachinesPagedAsync((long)curUser.CompanyID, 1500, 1);
+            
             if (vendingMachines != null)
             {
                 NoDataMessage.Visibility = Visibility.Collapsed;
-                UpdatePageCounters(vendingMachines);
-                DataGridTable.ItemsSource = vendingMachines?.VendingMachines;
-            }
-        }
-        private void UpdateAmountOnBox()
-        {
 
-            if (ValueBox.SelectedItem is ComboBoxItem item)
-            {
-                if (item.Content.ToString() == "Все") selectedAmount = 150000;
-                else
+                foreach(var ven in vendingMachines.VendingMachines)
                 {
-                    selectedAmount = Convert.ToInt32(item.Content.ToString());
+                    var vendingMachinePaymentM = await MachinePaymentService.GetMachinePaymentMethodesAsync();
+
+                    EntityAmountFound.Text = $"Всего найдено {vendingMachines.VendingMachines.Count()} шт.";
+
+                    pms = await PaymentMethodService.GetPaymentMethodesAsync();
+
+                    pagedSimCards = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, true);
+
+                    possiblyStoredMoney = await MoneyService.GetMoneyAsync();
+
+                    VendingMachineMonitorDTO selMachine = new VendingMachineMonitorDTO();
+
+                    selMachine.vm = ven;
+
+                    selMachine.basicInfo = $"{selMachine.vm.ID} - \u0022{selMachine.vm.Name}\u0022";
+
+                    selMachine.additionalInfo = $"{selMachine.vm.VendingMachineMatrix.ModelName} ({selMachine.vm.Modem.Model}) {selMachine.vm.Adress}";
+
+                    MachinePaymentMethod[] paymentMethods = vendingMachinePaymentM.ToArray();
+
+                    var resPaymentMe = paymentMethods.Where(e => e.VendingMachineID == selMachine.vm.ID).ToArray();
+
+                    selMachine.paymentMethods = resPaymentMe;
+
+                    var moneyVM = await MachineMoneyService.GetMachineMoneyAsync(selMachine.vm.ID);
+
+                    selMachine.machineMoney = moneyVM;
+
+                    foreach (var mon in selMachine.machineMoney)
+                    {
+                        mon.Money = possiblyStoredMoney.FirstOrDefault(m => m.ID == mon.MoneyID);
+                    }
+
+                    SimCard foundSim = new();
+
+                    if(pagedSimCards != null)
+                    {
+                        foundSim = pagedSimCards.Sims.FirstOrDefault(s => s.ID == selMachine.vm.Modem.SimCardID);
+                    }
+
+                    selMachine.simCard = foundSim;
+
+                    switch (selMachine.vm.StatusID)
+                    {
+                        case 1:
+                            selMachine.StatusColor = Brushes.Red;
+                            break;
+                        case 2:
+                            selMachine.StatusColor = Brushes.Blue;
+                            break;
+                        case 3:
+                            selMachine.StatusColor = Brushes.LawnGreen;
+                            break;
+                    }
+
+                    decimal sumVal = 0;
+
+                    if(moneyVM != null)
+                    {
+                        sumVal = selMachine.machineMoney.Sum(m => m.Amount * m.Money.Value);
+                    }
+
+                    if(pms != null)
+                    {
+                        selMachine.pms = pms;
+                    }
+
+                    if(selMachine.paymentMethods.Any(pm => pm.PaymentMethodID == 1))
+                    {
+                        selMachine.IsQR = true;
+                    }
+                    if (selMachine.paymentMethods.Any(pm => pm.PaymentMethodID == 2))
+                    {
+                        selMachine.IsMoneyP = true;
+                    }
+                    if (selMachine.paymentMethods.Any(pm => pm.PaymentMethodID == 3))
+                    {
+                        selMachine.IsCashP = true;
+                    }
+                    if (selMachine.paymentMethods.Any(pm => pm.PaymentMethodID == 4))
+                    {
+                        selMachine.IsCardP = true;
+                    }
+
+
+                    selMachine.Sum = sumVal;
+
+                    vendingMachineMonitorDTOs.Add(selMachine);
                 }
-            }
-        }
 
-        private async void ValueBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateAmountOnBox();
-            await LoadMachineData();
-        }
-
-        private void UpdatePageCounters(PagedMachinesResult pr)
-        {
-            PageNum.Text = page.ToString();
-            entityAmount = pr.TotalCount;
-
-            EntityAmountFound.Text = $"Всего найдено {entityAmount} шт.";
-
-
-            if (selectedAmount > entityAmount)
-            {
-                pageAmount = 1;
-            }
-            else
-            {
-                pageAmount = (int)Math.Ceiling((double)entityAmount / selectedAmount);
-            }
-
-            
-            if (pr.TotalCount == 0)
-            {
-                MachCountFromTo.Text = "Записи с 0 до 0 из 0 записей";
-            }
-            else if (page == 1 && selectedAmount > entityAmount)
-            {
-                MachCountFromTo.Text = $"Записи с 1 до {pr.TotalCount.ToString()} из {entityAmount} записей";
-            }
-            else
-            {
-                int entCountOst = 0;
-                if(selectedAmount > entityAmount) entCountOst = entityAmount;
-                else entCountOst = selectedAmount;
-                MachCountFromTo.Text = $"Записи с {page * pageAmount + 1} до {entCountOst} из {entityAmount} записей";
-            }
-                
-        }
-
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageManager.MainFrame.Navigate(new VendingMachinePage(new VendingMachine()));
-        }
-
-        private async void PrevPage_Click(object sender, RoutedEventArgs e)
-        {
-            if(page > 1 && pageAmount > 1)
-            {
-                page--;
-                await LoadMachineData();
-            }
-        }
-
-        private async void NextPage_Click(object sender, RoutedEventArgs e)
-        {
-            if (page >= 1 && pageAmount > 1)
-            {
-                page++;
-                await LoadMachineData();
+                DataGridTable.ItemsSource = vendingMachineMonitorDTOs;
             }
         }
 
@@ -157,118 +181,243 @@ namespace AdminClient.Views
 
         private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var tbx = sender as TextBox;
-            if (vendingMachines?.VendingMachines == null)
+
+            if (!IsInitialized)
                 return;
-            if (tbx.Text != "")
+
+            var tbx = sender as TextBox;
+            if (vendingMachineMonitorDTOs == null)
+                return;
+            filterWords = tbx.Text.Trim();
+            SetFilters();
+        }
+
+        private void SetFilters()
+        {
+            if(filterWords != "" && filterWords is not null)
             {
-                var filtered = vendingMachines.VendingMachines.Where(vm =>
-                vm.ID.ToString().Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.Name.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.ModelName.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.CompanyName.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.ModelID.ToString().Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.FullAdress.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase) ||
-                vm.PlacementDate.Contains(tbx.Text, StringComparison.OrdinalIgnoreCase)
+                filteredInfo = vendingMachineMonitorDTOs.Where(vm =>
+                vm.vm.ID.ToString().Contains(filterWords, StringComparison.OrdinalIgnoreCase) ||
+                vm.basicInfo.Contains(filterWords, StringComparison.OrdinalIgnoreCase) ||
+                vm.additionalInfo.Contains(filterWords, StringComparison.OrdinalIgnoreCase) ||
+                vm.simCard.Number.Contains(filterWords, StringComparison.OrdinalIgnoreCase) ||
+                vm.simCard.Vendor.Contains(filterWords, StringComparison.OrdinalIgnoreCase)
                 )
-                    .ToList();
-                DataGridTable.ItemsSource = filtered;
+                .ToList();
+                if(isNotWorkingStatus)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.vm.StatusID == 1).ToList();
+                }
+                else if (isWorkingStatus)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.vm.StatusID == 3).ToList();
+                }
+                else if (isUnknownStatus)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.vm.StatusID == 2).ToList();
+                }
+                if (isCashFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsCashP == true).ToList();
+                }
+                if (isMoneyFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsMoneyP == true).ToList();
+                }
+                if (isCardFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsCardP == true).ToList();
+                }
+                DataGridTable.ItemsSource = null;
+                DataGridTable.ItemsSource = filteredInfo;
             }
             else
             {
-                DataGridTable.ItemsSource = vendingMachines.VendingMachines;
+                filteredInfo = vendingMachineMonitorDTOs.ToList();
+
+                if (isNotWorkingStatus)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.vm.StatusID == 1).ToList();
+                }
+                else if (isWorkingStatus)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.vm.StatusID == 3).ToList();
+                }
+                else if (isUnknownStatus)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.vm.StatusID == 2).ToList();
+                }
+                if (isCashFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsCashP == true).ToList();
+                }
+                if (isMoneyFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsMoneyP == true).ToList();
+                }
+                if (isCardFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsCardP == true).ToList();
+                }
+                if (isQRFiltered)
+                {
+                    filteredInfo = filteredInfo.Where(vm => vm.IsQR == true).ToList();
+                }
+                DataGridTable.ItemsSource = null;
+                DataGridTable.ItemsSource = filteredInfo;
+            }
+            
+        }
+
+        private void DataGridTable_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
+
+        private void WorkingStatus_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isWorkingStatus)
+            {
+                isWorkingStatus = true;
+                isNotWorkingStatus = false;
+                isUnknownStatus = false;
+                WorkingStatus.Background = Brushes.DimGray;
+                BrokenStatus.Background = Brushes.Transparent;
+                UnknownStatus.Background = Brushes.Transparent;
+                SetFilters();
+            }
+            else
+            {
+                isWorkingStatus = false;
+                WorkingStatus.Background = Brushes.Transparent;
+                SetFilters();
+
             }
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private void BrokenStatus_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is VendingMachine machine)
+            if (!isNotWorkingStatus)
             {
-                PageManager.MainFrame.Navigate(new VendingMachinePage(machine));
-            }                
+                isNotWorkingStatus = true;
+                isWorkingStatus = false;
+                isUnknownStatus = false;
+                BrokenStatus.Background = Brushes.DimGray;
+                WorkingStatus.Background = Brushes.Transparent;
+                UnknownStatus.Background = Brushes.Transparent;
+                SetFilters();
+            }
+            else
+            {
+                isNotWorkingStatus = false;
+                BrokenStatus.Background = Brushes.Transparent;
+                SetFilters();
+            }
         }
-
-        private async void Delete_Click(object sender, RoutedEventArgs e)
+        private void UnknownStatus_Click(object sender, RoutedEventArgs e)
         {
-            if(sender is Button button && button.DataContext is VendingMachine machine)
+            if (!isUnknownStatus)
             {
-                var result = MessageBox.Show($"Вы точно хотите удалить торговый автомат {machine.Name}?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if(result == MessageBoxResult.Yes)
+                isUnknownStatus = true;
+                isWorkingStatus = false;
+                isNotWorkingStatus = false;
+                UnknownStatus.Background = Brushes.DimGray;
+                WorkingStatus.Background = Brushes.Transparent;
+                BrokenStatus.Background = Brushes.Transparent;
+                if (filteredInfo.Count > 0)
                 {
-                    try
-                    {
-                        var returnedResult = await Services.VendingMachinesService.DeleteVendingMachineAsync(machine.ID);
-                        if (returnedResult)
-                        {
-                            MessageBox.Show("Торговый автомат успешно удален.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Не удалось удалить торговый автомат. Возможно, он используется в других операциях.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Не удалось удалить торговый автомат.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    await LoadMachineData();
+                    SetFilters();
+                }
+                else
+                {
+                    SetFilters();
+                }
+            }
+            else
+            {
+                isUnknownStatus = false;
+                UnknownStatus.Background = Brushes.Transparent;
+                if (filteredInfo.Count > 0)
+                {
+                    SetFilters();
+                }
+                else
+                {
+                    SetFilters();
                 }
             }
         }
 
-        private async void UnbindModel_Click(object sender, RoutedEventArgs e)
+        private void CashFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is VendingMachine machine && machine.Modem != null)
+            if(!isCashFiltered)
             {
-                var result = MessageBox.Show($"Вы точно хотите отвязать торговый автомат {machine.Name} от модема?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        machine.ModemID = null;
-                        machine.Modem = null;
-
-                        var vendingM = new VendingMachineCreateDTO()
-                        {
-                            Name = machine.Name,
-                            ID = machine.ID,
-                            StatusID = 2,
-                            OperatingModeID = machine.OperatingModeID,
-                            PlacementType = machine.PlacementType,
-                            Adress = machine.Adress,
-                            StartHours = machine.StartHours,
-                            EndHours = machine.EndHours,
-                            TimeZone = machine.TimeZone,
-                            CompanyID = machine.CompanyID,
-                            Coordinates = machine.Coordinates,
-                            PlacementDate = machine.PlacementDate,
-                            ModelID = machine.VendingMachineMatrix.ID,
-                            ModemID = machine.ModemID
-                        };
-
-
-                        var returnedResult = await Services.VendingMachinesService.UpdateVendingMachineAsync(vendingM.ID, vendingM);
-                        if (returnedResult.ID != null)
-                        {
-                            MessageBox.Show("Торговый автомат успешно отвязан.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Не удалось отвязать модем.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Не удалось отвязать модем.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    await LoadMachineData();
-                }
+                isCashFiltered = true;
+                CashFilter.Background = Brushes.Gray;
+                CashFilterButton.Foreground = Brushes.White;
+                SetFilters();
+            }
+            else
+            {
+                isCashFiltered = false;
+                CashFilter.Background = Brushes.Transparent;
+                CashFilterButton.Foreground = Brushes.Gray;
+                SetFilters();
             }
         }
 
-        private void DataGridTable_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void MoneyFilterButton_Click(object sender, RoutedEventArgs e)
         {
+            if(!isMoneyFiltered)
+            {
+                isMoneyFiltered = true;
+                MoneyFilter.Background = Brushes.Gray;
+                MoneyFilterButton.Foreground = Brushes.White;
+                SetFilters();
+            }
+            else
+            {
+                isMoneyFiltered = false;
+                MoneyFilter.Background = Brushes.Transparent;
+                MoneyFilterButton.Foreground = Brushes.Gray;
+                SetFilters();
+            }
+        }
 
+        private void CardFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isCardFiltered)
+            {
+                isCardFiltered = true;
+                CardFilter.Background = Brushes.Gray;
+                CardFilterButton.Foreground = Brushes.White;
+                SetFilters();
+            }
+            else
+            {
+                isCardFiltered = false;
+                CardFilter.Background = Brushes.Transparent;
+                CardFilterButton.Foreground = Brushes.Gray;
+                SetFilters();
+            }
+        }
+
+        private void QRFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(!isQRFiltered)
+            {
+                isQRFiltered = true;
+                QRFilter.Background = Brushes.Gray;
+                QRFilterButton.Foreground = Brushes.White;
+                SetFilters();
+            }
+            else
+            {
+                isQRFiltered = false;
+                QRFilter.Background = Brushes.Transparent;
+                QRFilterButton.Foreground = Brushes.Gray;
+                SetFilters();
+            }
         }
     }
 }

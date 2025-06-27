@@ -83,6 +83,26 @@ namespace AdminClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] Beeline {
+            get {
+                object obj = ResourceManager.GetObject("Beeline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Megafon {
+            get {
+                object obj = ResourceManager.GetObject("Megafon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);
@@ -96,6 +116,16 @@ namespace AdminClient.Properties {
         internal static byte[] monitor {
             get {
                 object obj = ResourceManager.GetObject("monitor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MTS {
+            get {
+                object obj = ResourceManager.GetObject("MTS", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -133,9 +163,9 @@ namespace AdminClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] ru {
+        internal static byte[] Rostelecom {
             get {
-                object obj = ResourceManager.GetObject("ru", resourceCulture);
+                object obj = ResourceManager.GetObject("Rostelecom", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -166,6 +196,26 @@ namespace AdminClient.Properties {
         internal static byte[] shoppingCart {
             get {
                 object obj = ResourceManager.GetObject("shoppingCart", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] sim {
+            get {
+                object obj = ResourceManager.GetObject("sim", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Tele2 {
+            get {
+                object obj = ResourceManager.GetObject("Tele2", resourceCulture);
                 return ((byte[])(obj));
             }
         }

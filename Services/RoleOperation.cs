@@ -26,7 +26,7 @@ namespace AdminClient.Services
 
                 if (curUser != null && curUser.RoleID.HasValue && curUser.RoleID.Value == role.ID)
                 {
-                    curUser.Role = role.Name;
+                    curUser.Role = role;
                     LoginOperation.InitializeCurrentUser(curUser);
                 }
                 else

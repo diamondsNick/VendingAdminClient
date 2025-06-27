@@ -12,7 +12,7 @@ namespace AdminClient.Services
 {
     class MachinePaymentService
     {
-        public static async Task<MachinePaymentMethod[]> GetMachinePaymentMethodesAsync(long ID)
+        public static async Task<MachinePaymentMethod[]> GetMachinePaymentMethodesAsync(long ID = 0)
         {
             try
             {
@@ -24,11 +24,12 @@ namespace AdminClient.Services
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var paymentMethods  = JsonConvert.DeserializeObject<MachinePaymentMethod[]>(jsonResponse);
-                    if (paymentMethods != null)
+                    if (paymentMethods != null && ID != 0)
                     {
                         var filteredMethods = paymentMethods.Where(pm => pm.VendingMachineID == ID).ToArray();
                         return filteredMethods;
                     }
+                    if (paymentMethods != null) return paymentMethods;
                     return Array.Empty<MachinePaymentMethod>();
                 }
                 else

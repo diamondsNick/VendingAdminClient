@@ -32,14 +32,16 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="445*"/>
                     </Grid.RowDefinitions>
-                    <Border Grid.Row="0" Background="#f6f6f6" BorderBrush="DeepSkyBlue" BorderThickness="0,2,0,0.5"
-                           CornerRadius="5,5,0,0" Grid.ColumnSpan="3">
+                    <Border Grid.Row="0" Background="#f6f6f6" BorderBrush="DeepSkyBlue"
+                            BorderThickness="0,2,0,0.5"
+                           CornerRadius="5,5,0,0"
+                            Grid.ColumnSpan="3">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="21*"/>
                                 <RowDefinition Height="17*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Margin="5,0,5,0" VerticalAlignment="Center" FontSize="17" Foreground="DeepSkyBlue">Торговые автоматы</TextBlock>
+                            <TextBlock Margin="5,0,5,0" VerticalAlignment="Center" FontSize="17" Foreground="DeepSkyBlue">Монитор торговых автоматов</TextBlock>
                             <TextBlock Name="EntityAmountFound" Grid.Row="1" FontSize="10" Margin="6,0,0,0">Всего найдено 0 шт.</TextBlock>
                         </Grid>
                     </Border>
@@ -50,12 +52,78 @@
                             <ColumnDefinition Width="45"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        
+                        <Border x:Name="WorkingStatus" Grid.Column="0" Width="45" HorizontalAlignment="Right" 
+                                BorderBrush="Gray" BorderThickness="0.5" 
+                                CornerRadius="5,0,0,5"
+                                Margin="0,3,0,3">
+                            <Button  Click="WorkingStatus_Click" Foreground="LawnGreen" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,5" HorizontalAlignment="Center">●</TextBlock>
+                            </Button>
+                        </Border>
+                        <Border x:Name="BrokenStatus" Grid.Column="1" Width="45" HorizontalAlignment="Left" 
+                            BorderBrush="Gray" BorderThickness="0, 0.5, 0, 0.5" 
+                            Margin="0,3,0,3">
+                            <Button  Click="BrokenStatus_Click" Foreground="Red" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,5" HorizontalAlignment="Center">●</TextBlock>
+                            </Button>
+                        </Border>
+                        <Border x:Name="UnknownStatus" Grid.Column="2" Width="45" HorizontalAlignment="Left" 
+                            BorderBrush="Gray" BorderThickness="0.5" 
+                            CornerRadius="0,5,5,0"
+                            Margin="0,3,0,3">
+                            <Button  Click="UnknownStatus_Click" Foreground="Blue" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,5" HorizontalAlignment="Center">●</TextBlock>
+                            </Button>
+                        </Border>
                     </Grid>
 
                     <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="187,0,0,0">
                         <TextBox x:Name="FilterBox" Grid.Column="1" GotFocus="FilterBox_GotFocus" TextChanged="FilterBox_TextChanged" Grid.Row="1" Text="Фильтр" BorderBrush="Gray" Width="170" BorderThickness="1" Height="26" VerticalAlignment="Center"
                                 FontSize="13" Padding="5,2,0,0" HorizontalAlignment="Center" />
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.Column="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"/>
+                            <ColumnDefinition Width="45"/>
+                            <ColumnDefinition Width="45"/>
+                            <ColumnDefinition Width="45"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="45" HorizontalAlignment="Right" 
+                            x:Name="CashFilter"
+                            BorderBrush="Gray" BorderThickness="0.5" 
+                            CornerRadius="5,0,0,5"
+                            Margin="0,3,0,3">
+                            <Button x:Name="CashFilterButton" Click="CashFilterButton_Click" Foreground="Gray" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,5" HorizontalAlignment="Center">💵</TextBlock>
+                            </Button>
+                        </Border>
+                        <Border Grid.Column="1" Width="45" HorizontalAlignment="Left" 
+                            BorderBrush="Gray" 
+                            x:Name="MoneyFilter"
+                            BorderThickness="0, 0.5, 0, 0.5" 
+                            Margin="0,3,0,3">
+                            <Button x:Name="MoneyFilterButton" Click="MoneyFilterButton_Click" Foreground="Gray" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,3" HorizontalAlignment="Center">©</TextBlock>
+                            </Button>
+                        </Border>
+                        <Border x:Name="CardFilter" Grid.Column="2" Width="45" HorizontalAlignment="Left" 
+                            BorderBrush="Gray" BorderThickness="0.5, 0.5, 0, 0.5" 
+                            CornerRadius="0,0,0,0"
+                            Margin="0,3,0,3">
+                            <Button x:Name="CardFilterButton" Click="CardFilterButton_Click" Foreground="Gray" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,8" HorizontalAlignment="Center">💳</TextBlock>
+                            </Button>
+                        </Border>
+                        <Border Grid.Column="3" Width="45" HorizontalAlignment="Left" 
+                            BorderBrush="Gray" BorderThickness="0.5" 
+                            CornerRadius="0,5,5,0"
+                            Margin="0,3,0,3"
+                            x:Name="QRFilter">
+                            <Button x:Name="QRFilterButton" Click="QRFilterButton_Click" Foreground="Gray" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock VerticalAlignment="Center" Padding="0,0,0,0" HorizontalAlignment="Center">📳</TextBlock>
+                            </Button>
+                        </Border>
                     </Grid>
                     <Border x:Name="NoDataMessage"
                             Margin="10,10,10,10"
@@ -65,7 +133,8 @@
                             Panel.ZIndex="1">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">В таблице отсутствуют данные</TextBlock>
                     </Border>
-                    <DataGrid Name="DataGridTable" ItemsSource="{Binding VendingMachines}" 
+                    <DataGrid Name="DataGridTable" 
+                         LoadingRow="DataGridTable_LoadingRow"
                          AutoGenerateColumns="False"
                          GridLinesVisibility="None" 
                          IsReadOnly="True"
@@ -74,36 +143,131 @@
                          Grid.ColumnSpan="3">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="Auto"/>
-                            <DataGridTextColumn Header="Название автомата" Binding="{Binding Name}" Width="Auto" />
-                            <DataGridTextColumn Header="Модель" Binding="{Binding ModelName}" Width="Auto"/>
-                            <DataGridTextColumn Header="Компания" Binding="{Binding CompanyName}" Width="Auto"/>
-                            <DataGridTextColumn Header="Модем" Width="Auto">
-                                <DataGridTextColumn.Binding>
-                                    <Binding Path="ModemID" TargetNullValue="—1"></Binding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Адрес/Место" Binding="{Binding FullAdress}" Width="Auto"/>
-                            <DataGridTextColumn Header="В работе с" Binding="{Binding PlacementDate}" Width="Auto"/>
-                            <DataGridTemplateColumn Header="Действия">
+                            <DataGridTemplateColumn Header="Торговый автомат">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button x:Name="Edit" Click="Edit_Click" Margin="2" Width="30" Height="30" Background="Transparent" BorderBrush="#d9d9d9" BorderThickness="1">
-                                                <TextBlock TextAlignment="Center" Text="✏️" FontSize="16"/>
-                                            </Button>
-                                            <Button x:Name="Delete" Click="Delete_Click" Margin="2" Width="30" Height="30" Background="Transparent" BorderBrush="#d9d9d9" BorderThickness="1">
-                                                <TextBlock TextAlignment="Center" Text="🗑️" FontSize="16"/>
-                                            </Button>
-                                            <Button x:Name="UnbindModel" Click="UnbindModel_Click" Margin="2" Width="30" Height="30" Background="Transparent" BorderBrush="#d9d9d9" BorderThickness="1">
-                                                <TextBlock TextAlignment="Center" Text="🔓" FontSize="16"/>
-                                            </Button>
-                                        </StackPanel>
+                                        <Grid VerticalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="10" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Column="0"
+                                               Grid.RowSpan="2"
+                                               Text="●"
+                                               FontSize="14"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Padding="0,0,0,5"
+                                               Margin="0,0,4,0"
+                                               Foreground="{Binding StatusColor}" />
+
+                                            <TextBlock Grid.Column="1"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Left"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Text = "{Binding basicInfo}">
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="1"
+                                               Grid.Row="1"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Left"
+                                               FontSize="13"
+                                               Text = "{Binding additionalInfo}"
+                                                       Foreground="Gray">
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Связь">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Image Grid.Row="0"
+                                                Width="40" Height="40"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Setter Property="Source" Value="/Resources/sim.png"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding simCard.Vendor}" Value="МТС">
+                                                                <Setter Property="Source" Value="/Resources/MTS.png"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding simCard.Vendor}" Value="МегаФон">
+                                                                <Setter Property="Source" Value="/Resources/Megafon.png"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding simCard.Vendor}" Value="Теле2">
+                                                                <Setter Property="Source" Value="/Resources/Tele2.png"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding simCard.Vendor}" Value="Билайн">
+                                                                <Setter Property="Source" Value="/Resources/Beeline.png"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding simCard.Vendor}" Value="Ростелеком">
+                                                                <Setter Property="Source" Value="/Resources/Rostelecom.png"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                            <TextBlock Grid.Row="1" TextAlignment="Center" Text="{Binding simCard.Number}"></TextBlock>
+                                            <TextBlock Grid.Row="2" TextAlignment="Center" Text="{Binding simCard.Balance}"></TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Денежные средства">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="Sum" StringFormat="{}💵{0}₽" />
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.Width>Auto</DataGridTextColumn.Width>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Способы оплаты">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock FontSize="20" Grid.Column="0" x:Name="Cash" Visibility="Collapsed" Foreground="Gray">💵</TextBlock>
+                                            <TextBlock FontSize="20" Grid.Column="1" x:Name="Money" Visibility="Collapsed" Foreground="Gray">©</TextBlock>
+                                            <TextBlock FontSize="20" Grid.Column="2" x:Name="Card" Visibility="Collapsed" Foreground="Gray">💳</TextBlock>
+                                            <TextBlock FontSize="20" Grid.Column="3" x:Name="QR" Visibility="Collapsed" Foreground="Gray">📳</TextBlock>
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsCashP}" Value="True">
+                                                <Setter TargetName="Cash" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMoneyP}" Value="True">
+                                                <Setter TargetName="Money" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsCardP}" Value="True">
+                                                <Setter TargetName="Card" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsQR}" Value="True">
+                                                <Setter TargetName="QR" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
-
+                        
                     </DataGrid>
 
                 </Grid>

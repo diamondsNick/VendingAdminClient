@@ -104,22 +104,22 @@ namespace AdminClient.Views
 
             foreach (var machinePaymentMethod in machinePaymentMethods)
             {
-                if (machinePaymentMethod.PaymentMethodID == 3)
+                if (machinePaymentMethod.PaymentMethodID == 2)
                 {
                     CoinSlot = true;
                     CoinBox.IsChecked = true;
                 }
-                else if (machinePaymentMethod.PaymentMethodID == 2)
+                else if (machinePaymentMethod.PaymentMethodID == 3)
                 {
                     BankNotesSlot = true;
                     BankNotesBox.IsChecked = true;
                 }
-                else if (machinePaymentMethod.PaymentMethodID == 1)
+                else if (machinePaymentMethod.PaymentMethodID == 4)
                 {
                     NoContactPaymentSlot = true;
                     NoContactBox.IsChecked = true;
                 }
-                else if (machinePaymentMethod.PaymentMethodID == 4)
+                else if (machinePaymentMethod.PaymentMethodID == 1)
                 {
                     QRCode = true;
                     QRBox.IsChecked = true;
@@ -333,37 +333,37 @@ namespace AdminClient.Views
 
                     if (result != null)
                     {
-                        if (CoinSlot == true && !machinePaymentMethods.Any(e => e.VendingMachineID==result.ID && e.PaymentMethodID == 3))//3
+                        if (CoinSlot == true && !machinePaymentMethods.Any(e => e.VendingMachineID==result.ID && e.PaymentMethodID == 2))
                         {
                             var res = await MachinePaymentService.CreateMachinePaymentMethodeAsync(result.ID, 3);
                         }
-                        if (BankNotesSlot == true && !machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID ==2)) //2
+                        if (BankNotesSlot == true && !machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID ==3))
                         {
                             var res = await MachinePaymentService.CreateMachinePaymentMethodeAsync(result.ID, 2);
                         }
-                        if (NoContactPaymentSlot == true && !machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 1))//1 безнал
+                        if (NoContactPaymentSlot == true && !machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 4))
                         {
                             var res = await MachinePaymentService.CreateMachinePaymentMethodeAsync(result.ID, 1);
                         }
-                        if (QRCode == true && !machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 4))//4 код
+                        if (QRCode == true && !machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 1))
                         {
                             var res = await MachinePaymentService.CreateMachinePaymentMethodeAsync(result.ID, 4);
                         }
 
                         //Удаление
-                        if (CoinSlot == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 3))//3
+                        if (CoinSlot == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 2))
                         {
                             var res = await MachinePaymentService.DeleteMachinePaymentMethodeAsync(result.ID, 3);
                         }
-                        if (BankNotesSlot == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 2)) //2
+                        if (BankNotesSlot == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 3))
                         {
                             var res = await MachinePaymentService.DeleteMachinePaymentMethodeAsync(result.ID, 2);
                         }
-                        if (NoContactPaymentSlot == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 1))//1 безнал
+                        if (NoContactPaymentSlot == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 4))
                         {
                             var res = await MachinePaymentService.DeleteMachinePaymentMethodeAsync(result.ID, 1);
                         }
-                        if (QRCode == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 4))//4 код
+                        if (QRCode == false && machinePaymentMethods.Any(e => e.VendingMachineID == result.ID && e.PaymentMethodID == 1))
                         {
                             var res = await MachinePaymentService.DeleteMachinePaymentMethodeAsync(result.ID, 4);
                         }

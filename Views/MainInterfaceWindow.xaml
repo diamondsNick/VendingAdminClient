@@ -9,7 +9,7 @@
 
    Title="Личный кабинет" Height="450" Width="800"
    SizeToContent="WidthAndHeight"
-   MinHeight="700" MinWidth="820" WindowStartupLocation="CenterScreen" Icon="/Resources/monitor.png">
+   MinHeight="700" MinWidth="1150" WindowStartupLocation="CenterScreen" Icon="/Resources/monitor.png">
    <Grid>
        <Grid.ColumnDefinitions>
            <ColumnDefinition Width="200" x:Name="LeftMenuColumn"/>

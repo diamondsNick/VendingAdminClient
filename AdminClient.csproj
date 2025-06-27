@@ -8,20 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\RoleOperation.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Resources\arrow.png" />
     <None Remove="Resources\arrowUP.png" />
+    <None Remove="Resources\Beeline.png" />
     <None Remove="Resources\burger.png" />
+    <None Remove="Resources\Megafon.png" />
     <None Remove="Resources\monitor.png" />
+    <None Remove="Resources\MTS.png" />
     <None Remove="Resources\pointer.png" />
     <None Remove="Resources\power.png" />
     <None Remove="Resources\profile.png" />
+    <None Remove="Resources\Rostelecom.png" />
     <None Remove="Resources\search.png" />
     <None Remove="Resources\settings.png" />
     <None Remove="Resources\shoppingCart.png" />
+    <None Remove="Resources\sim.png" />
+    <None Remove="Resources\Tele2.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,17 +35,23 @@
   <ItemGroup>
     <Resource Include="Resources\arrow.png" />
     <Resource Include="Resources\arrowUP.png" />
+    <Resource Include="Resources\Beeline.png" />
     <Resource Include="Resources\burger.png" />
+    <Resource Include="Resources\Megafon.png" />
     <Resource Include="Resources\monitor.png" />
+    <Resource Include="Resources\MTS.png" />
     <Resource Include="Resources\pointer.png" />
     <Resource Include="Resources\power.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\profile.png" />
+    <Resource Include="Resources\Rostelecom.png" />
     <Resource Include="Resources\ru.png" />
     <Resource Include="Resources\search.png" />
     <Resource Include="Resources\settings.png" />
     <Resource Include="Resources\shoppingCart.png" />
+    <Resource Include="Resources\sim.png" />
+    <Resource Include="Resources\Tele2.png" />
   </ItemGroup>
 
   <ItemGroup>
