@@ -51,6 +51,9 @@ namespace AdminClient.Views
                 UserRole.Text = curUser.Role.Name;
             }
 
+            if (curUser.Role.Name != "Администратор") Administrate.Visibility = Visibility.Collapsed;
+            if (curUser.Role.Name != "Администратор" && curUser.Role.Name != "Бухгалтер") CountingTMC.Visibility = Visibility.Collapsed;
+
             PageManager.MainFrame = MainFrame;
             PageManager.MainFrame.Navigate(new MainPage());
         }

@@ -27,10 +27,8 @@ namespace AdminClient.Views
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            //string login = LoginBox.Text;
-            //string password = PasswordBox.Text;
-            string login = "1231123123";
-            string password = "887171";
+            string login = LoginBox.Text;
+            string password = PasswordBox.Text;
 
             LoginOperation operation = new LoginOperation();
 
