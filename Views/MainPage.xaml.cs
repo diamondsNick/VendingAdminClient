@@ -52,6 +52,7 @@ namespace AdminClient.Views
                 mainWindow.CurrentPageTitle.Text = "Главная";
             }
             DataContext = this;
+
             await RunLoopEvery30SecondsAsync(_loopCts.Token);
         }
         private async Task RunLoopEvery30SecondsAsync(CancellationToken token)
@@ -62,7 +63,11 @@ namespace AdminClient.Views
                 {
                     MachinePieChart();
                     NetworkStabilityChart();
-
+                    loadSales();
+                    if(isSumGraphType)
+                    {
+                        GraphBySum();
+                    }
 
                     await Task.Delay(TimeSpan.FromSeconds(30), token);
                 }
@@ -72,18 +77,23 @@ namespace AdminClient.Views
                 }
             }
         }
+        private void loadSales(object sender, RoutedEventArgs e)
+        {
+            loadSales();
+        }
 
-        private async void loadSales(object sender, RoutedEventArgs e)
+        private async void loadSales()
         {
             curUser = await LoginOperation.GetCurrentUserAsync();
             if(curUser != null && curUser.CompanyID != null)
             {
                 Sales = await SalesService.GetCompanySalesAsync(curUser.CompanyID.Value);
-                GraphBySum(sender, e);
+                GraphBySum();
             }
             
         }
-        private void GraphBySum(object sender, RoutedEventArgs e)
+
+        private void GraphBySum()
         {
             DateOfGraphic.Text = "Данные по продажам с " + DateTime.Now.AddDays(-10).ToString("dd.MM.yyyy") + " по " + DateTime.Now.ToString("dd.MM.yyyy");
             var model = new PlotModel();
@@ -147,7 +157,7 @@ namespace AdminClient.Views
             GraphVending.Model = model;
         }
 
-        private void GraphByQty(object sender, RoutedEventArgs e)
+        private void GraphByQty()
         {
             var model = new PlotModel();
 
@@ -316,7 +326,7 @@ namespace AdminClient.Views
                 QtyButtonBackground.BorderThickness = new Thickness(1);
                 QtyButton.Foreground = new SolidColorBrush(Colors.Black);
 
-                GraphBySum(sender, e);
+                GraphBySum();
                 isSumGraphType = true;
             }
         }
@@ -333,7 +343,7 @@ namespace AdminClient.Views
                 SumButtonBackground.BorderThickness = new Thickness(1);
                 SumButton.Foreground = new SolidColorBrush(Colors.Black);
 
-                GraphByQty(sender, e);
+                GraphByQty();
                 isSumGraphType = false;
             }
         }
