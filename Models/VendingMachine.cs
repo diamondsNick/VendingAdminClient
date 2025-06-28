@@ -41,7 +41,7 @@ namespace AdminClient.Models
         public string? EndHours { get; set; }
         public IList<MachinePaymentMethod>? MachinePaymentMethods { get; set; }
         public Status? Status { get; set; }
-        public Modem? Modem { get; set; }
+        public Modem? Modem { get; set; } = new();
         [JsonIgnore]
         public IList<Sale>? Sales { get; set; }
         public OperatingMode? OperatingMode { get; set; }

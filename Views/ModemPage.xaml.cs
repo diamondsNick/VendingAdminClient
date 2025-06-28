@@ -60,7 +60,7 @@ namespace AdminClient.Views
 
             if (!isNewModem)
             {
-                sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, true);
+                sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, false);
 
                 SimCard conSim = new();
 

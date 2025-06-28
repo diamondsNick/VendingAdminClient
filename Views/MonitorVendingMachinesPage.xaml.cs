@@ -119,7 +119,37 @@ namespace AdminClient.Views
 
                     selMachine.basicInfo = $"{selMachine.vm.ID} - \u0022{selMachine.vm.Name}\u0022";
 
-                    selMachine.additionalInfo = $"{selMachine.vm.VendingMachineMatrix.ModelName} ({selMachine.vm.Modem.Model}) {selMachine.vm.Adress}";
+                    string modelMachine = "";
+                    string modemName = "";
+                    string machineAdress = "";
+
+                    if (selMachine.vm.VendingMachineMatrix != null)
+                    {
+                        modelMachine = selMachine.vm.VendingMachineMatrix.ModelName;
+                    }
+                    else
+                    {
+                        modelMachine = "Нет";
+                    }
+
+                    if (selMachine.vm.Modem != null)
+                    {
+                        modemName = selMachine.vm.Modem.Model;
+                    }
+                    else
+                    {
+                        modemName = "Нет";
+                    }
+                    
+                    if (selMachine.vm.Adress != null)
+                    {
+                        machineAdress = selMachine.vm.Adress;
+                    }
+                    else
+                    {
+                        machineAdress = "Нет адреса";
+                    }
+                    selMachine.additionalInfo = $"{modelMachine} ({modemName}) {machineAdress}";
 
                     MachinePaymentMethod[] paymentMethods = vendingMachinePaymentM.ToArray();
 
@@ -138,12 +168,18 @@ namespace AdminClient.Views
 
                     SimCard foundSim = new();
 
-                    if(pagedSimCards != null)
+                    if(pagedSimCards != null && selMachine.vm.Modem != null)
                     {
                         foundSim = pagedSimCards.Sims.FirstOrDefault(s => s.ID == selMachine.vm.Modem.SimCardID);
                     }
+                    else
+                    {
+                        foundSim.Number = "Не известно";
+                        foundSim.Vendor = "Не известно";
+                        foundSim.Balance = 0;
+                    }
 
-                    selMachine.simCard = foundSim;
+                        selMachine.simCard = foundSim;
 
                     switch (selMachine.vm.StatusID)
                     {
