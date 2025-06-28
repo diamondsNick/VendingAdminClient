@@ -27,7 +27,7 @@ namespace AdminClient.Views
         bool isNewModem = false;
         User curUser;
         Modem modem;
-        PagedSimCards sims;
+        PagedSimCards sims = new PagedSimCards();
         public ModemPage(Modem modemInfo)
         {
 
@@ -60,9 +60,14 @@ namespace AdminClient.Views
 
             if (!isNewModem)
             {
-                SimCard conSim = sims.Sims.FirstOrDefault(s => s.ID == modem.SimCardID);
-
                 sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, true);
+
+                SimCard conSim = new();
+
+                if (sims != null)
+                {
+                    conSim = sims.Sims.FirstOrDefault(s => s.ID == modem.SimCardID);
+                }
 
                 if (conSim != null && conSim.ID != 0)
                 {
@@ -72,12 +77,15 @@ namespace AdminClient.Views
             }
             if (isNewModem)
             {
-                sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, true);
+                sims = await SIMService.GetPagedSimsAsync(1500, 1, curUser.Company.ID, false);
             }
 
             SimIDBox.DisplayMemberPath = "Number";
             SimIDBox.SelectedValuePath = "ID";
-            SimIDBox.ItemsSource = sims.Sims;
+            if(sims != null)
+            {
+                SimIDBox.ItemsSource = sims.Sims;
+            }
             DataContext = modem;
         }
         private async void ConfigureNewModem()
