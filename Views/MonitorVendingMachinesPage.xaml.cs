@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,8 +27,13 @@ namespace AdminClient.Views
     public partial class MonitorVendingMachinesPage : Page
     {
         public static int entityAmount = 0;
+
         List<VendingMachineMonitorDTO> vendingMachineMonitorDTOs = new List<VendingMachineMonitorDTO>();
+
         List<VendingMachineMonitorDTO> filteredInfo = new List<VendingMachineMonitorDTO>();
+
+        private CancellationTokenSource _loopCts = new CancellationTokenSource();
+
         public PagedMachinesResult? vendingMachines { get; set; }
         public PagedSimCards pagedSimCards { get; set; }
         public Money[] possiblyStoredMoney { get; set; }
@@ -60,6 +66,23 @@ namespace AdminClient.Views
             }
 
             await LoadMachineData();
+
+            await RunLoopEvery30SecondsAsync(_loopCts.Token);
+        }
+        private async Task RunLoopEvery30SecondsAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    SetFilters();
+                    await Task.Delay(TimeSpan.FromSeconds(30), token);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
+            }
         }
 
         private async Task LoadMachineData()

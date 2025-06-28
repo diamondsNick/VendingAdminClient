@@ -31,7 +31,11 @@ namespace AdminClient.Views
         {
             var curUser = await Services.LoginOperation.GetCurrentUserAsync();
             CompanyNameBox.Text = "";
-            if (curUser.Company.Name != null) CompanyNameBox.Text = curUser.Company.Name;
+            if (curUser.Company != null && curUser.Company.Name != "")
+            {
+                CompanyNameBox.Text = curUser.Company.Name;
+            }
+            if (curUser.Company.Name != "") CompanyNameBox.Text = curUser.Company.Name;
 
             LanguageImg.Source = new BitmapImage(new Uri($"/Resources/ru.png", UriKind.Relative));
             if (!File.Exists($"/Resources/{curUser.Language}.png"))
