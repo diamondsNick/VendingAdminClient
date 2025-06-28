@@ -16,11 +16,11 @@
             <ColumnDefinition Width="129*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="27*"/>
-            <RowDefinition Height="383*"/>
+            <RowDefinition Height="190*"/>
+            <RowDefinition Height="360"/>
             <RowDefinition Height="190*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Column="1" Grid.Row="1" Margin="0,24,0,93">
+        <Grid Grid.Column="1" Grid.Row="1">
             <Border Grid.Column="0" Background="White" CornerRadius="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
